@@ -6,6 +6,13 @@
       "description": "信用案例的真实事实图谱数据",
       "edgeDataPath": "credit_case_real_bundle/credit_case_edges_full.tsv",
       "nodeDataPath": "credit_case_real_bundle/credit_case_nodes.tsv"
+    },
+    {
+      "filename": "credit_case_ai_bundle/credit_case_ai_fact_graph.ftree",
+      "name": "信用案例智能体分析结果",
+      "description": "基于智能体输出的事实标签映射和风险传递边生成的可视化数据",
+      "edgeDataPath": "credit_case_ai_bundle/credit_case_edges_ai.tsv",
+      "nodeDataPath": "credit_case_ai_bundle/credit_case_nodes_ai.tsv"
     }
   ]
 }

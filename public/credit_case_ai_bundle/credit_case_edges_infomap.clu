@@ -1,0 +1,28 @@
+# v2.8.0
+# ./Infomap output/fix_edge_inconsistancy_qwen-max/bundle/credit_case_edges_infomap.tsv output/fix_edge_inconsistancy_qwen-max/bundle --ftree --clu -2
+# started at 2025-12-04 06:11:12
+# completed in 0.000389667 s
+# partitioned into 2 levels with 6 top modules
+# codelength 1.69812 bits
+# relative codelength savings 58.1074%
+# flow model undirected
+# module level 1
+# node_id module flow
+8 1 0.125
+9 1 0.0833333
+6 1 0.0416667
+7 1 0.0416667
+10 1 0.0416667
+3 2 0.0833333
+5 2 0.0833333
+2 2 0.0416667
+4 2 0.0416667
+25 3 0.0833333
+21 3 0.0416667
+27 3 0.0416667
+13 4 0.0416667
+14 4 0.0416667
+16 5 0.0416667
+18 5 0.0416667
+22 6 0.0416667
+24 6 0.0416667

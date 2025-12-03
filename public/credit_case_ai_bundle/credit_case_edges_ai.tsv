@@ -1,0 +1,13 @@
+edge_id	from_fact_id	to_fact_id	from_entity_id	to_entity_id	relation_type	direction	weight	llm_confidence	risk_polarity	risk_tags	reason_brief	source_doc_ids	created_by_model	created_at	human_label	human_confidence	reviewer	reviewed_at
+e1	F3	F5	Entity	Entity	数量逻辑一致性	undirected	0.85	0.9	negative	risk_check	企业年开票金额与日均存款应存在合理比例关系，通常日均存款不应显著低于年开票金额的一定比例（如5%-10%），否则可能存在资金回流不足或收入真实性存疑。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e2	F6	F8	Entity	Entity	数量逻辑一致性	undirected	0.85	0.9	negative	risk_check	已转租面积不应超过租赁总面积，且剩余未转租面积应等于租赁面积减去已转租面积。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e3	F7	F9	Entity	Entity	单位指标合理性	directed	0.85	0.9	negative	risk_check	转租收入应与支出形成合理价差，单位面积转租单价通常应高于租入单价，否则商业模式不可持续。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e4	F8	F9	Entity	Entity	单位指标合理性	directed	0.85	0.9	negative	risk_check	根据已转租面积和年租金收入，可计算单位面积年租金，应处于当地市场合理区间内。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e5	F10	F8	Entity	Entity	数量逻辑一致性	undirected	0.85	0.9	negative	risk_check	拟转租面积 + 已转租面积 应 ≤ 租赁总面积，且拟转租面积应为非负数。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e6	F13	F14	Entity	Entity	资产覆盖合理性	directed	0.85	0.9	negative	risk_check	抵押物价值应能覆盖贷款余额，通常要求抵押率不超过一定比例（如70%）。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e7	F18	F16	Entity	Entity	数量逻辑一致性	undirected	0.85	0.9	negative	risk_check	对外担保总额应 ≥ 他行担保余额，因他行担保是对外担保的一部分。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e8	F21	F25	Entity	Entity	收入佐证一致性	undirected	0.85	0.9	negative	risk_check	担保人声明的年净收入应能被其资产性收入（如租金）及其他收入来源合理支撑。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e9	F24	F22	Entity	Entity	资产价值一致性	undirected	0.85	0.9	negative	risk_check	高端住宅数量与单套住宅评估价值应匹配，避免资产虚高或低估。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e10	F2	F3	Entity	Entity	时间逻辑一致性	undirected	0.85	0.9	negative	risk_check	2024年无开票记录与2025年有开票金额不冲突，但需确认是否跨年业务真实发生。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e11	F27	F25	Entity	Entity	偿债能力合理性	directed	0.85	0.9	negative	risk_check	保证贷款余额应与担保人年净收入保持合理比例，通常年收入应能覆盖贷款余额的一定比例（如20%以上）以体现代偿能力。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		
+e12	F4	F5	Entity	Entity	账户行为一致性	undirected	0.85	0.9	negative	risk_check	基本户开户行的日均存款应反映企业主要资金沉淀情况，若日均存款过低，可能基本户未实际使用或存在多头开户。	agent_output	llm_risk_agent	2025-12-04T00:00:00Z	verified	0.9		

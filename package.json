@@ -23,8 +23,8 @@
     "react-snap": "^1.23.0"
   },
   "scripts": {
-    "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
     "test": "react-scripts test",
     "deploy": "react-scripts build && react-snap && scp -r build/* mapequation:/var/www/network-navigator",
     "postbuild": "react-snap",

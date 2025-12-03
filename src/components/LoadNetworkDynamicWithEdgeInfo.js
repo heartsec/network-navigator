@@ -29,6 +29,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     progressError: false,
     ftree: null,
     selectedExample: "",
+    selectedEdgeDataPath: "",
+    selectedNodeDataPath: "",
     exampleFiles: [],
     loading: true,
   };
@@ -81,11 +83,15 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           text: file.name || this.formatFileName(file.filename),
           value: file.filename,
           description: file.description || "",
+          edgeDataPath: file.edgeDataPath || "",
+          nodeDataPath: file.nodeDataPath || "",
         }));
         
         this.setState({
           exampleFiles,
           selectedExample: exampleFiles[0]?.value || "",
+          selectedEdgeDataPath: exampleFiles[0]?.edgeDataPath || "",
+          selectedNodeDataPath: exampleFiles[0]?.nodeDataPath || "",
           loading: false,
         });
       } else {
@@ -128,17 +134,69 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       .join(" ");
   };
 
-  // 加载边关系数据（TSV 格式）
-  loadEdgeData = async (filename) => {
+  // 加载节点数据（TSV 格式）
+  loadNodeData = async (nodeDataPath) => {
     try {
-      // 尝试加载对应的边数据文件
-      const baseName = filename.replace(".ftree", "");
-      const edgeFileName = `fact_graph_bundle/edges_full.tsv`;
+      if (!nodeDataPath) {
+        console.log("No node data path specified");
+        return null;
+      }
       
-      const response = await fetch(`/navigator/${edgeFileName}`);
+      const response = await fetch(`/navigator/${nodeDataPath}`);
       
       if (!response.ok) {
-        console.log(`No edge data file found for ${filename}`);
+        console.log(`No node data file found at ${nodeDataPath}`);
+        return null;
+      }
+
+      const text = await response.text();
+      const lines = text.trim().split("\n");
+      
+      if (lines.length < 2) {
+        console.log("Node data file is empty");
+        return null;
+      }
+
+      // 解析 TSV 表头
+      const headers = lines[0].split("\t").map(h => h.trim());
+      
+      // 创建 fact_id -> node data 的映射
+      const nodeMap = new Map();
+      
+      lines.slice(1).forEach(line => {
+        const values = line.split("\t");
+        const node = {};
+        
+        headers.forEach((header, index) => {
+          node[header] = values[index] ? values[index].trim() : "";
+        });
+        
+        if (node.fact_id) {
+          nodeMap.set(node.fact_id, node);
+        }
+      });
+      
+      console.log(`Loaded ${nodeMap.size} node records`);
+      return nodeMap;
+    } catch (err) {
+      console.error("Error loading node data:", err);
+      return null;
+    }
+  };
+
+  // 加载边关系数据（TSV 格式）
+  loadEdgeData = async (edgeDataPath) => {
+    try {
+      // 如果没有指定边数据路径，返回空
+      if (!edgeDataPath) {
+        console.log("No edge data path specified");
+        return null;
+      }
+      
+      const response = await fetch(`/navigator/${edgeDataPath}`);
+      
+      if (!response.ok) {
+        console.log(`No edge data file found at ${edgeDataPath}`);
         return null;
       }
 
@@ -212,11 +270,14 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
 
         this.setState({
           progressValue: 3,
-          progressLabel: "Loading edge data...",
+          progressLabel: "Loading additional data...",
         });
 
-        // 尝试加载边关系数据
-        return this.loadEdgeData(name).then((edgeData) => {
+        // 同时加载边关系数据和节点数据
+        return Promise.all([
+          this.loadEdgeData(this.state.selectedEdgeDataPath),
+          this.loadNodeData(this.state.selectedNodeDataPath)
+        ]).then(([edgeData, nodeData]) => {
           this.setState({
             progressLabel: "Success",
           });
@@ -226,7 +287,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
             this.props.onLoad({ 
               network, 
               filename: name,
-              edgeData: edgeData || []
+              edgeData: edgeData || [],
+              nodeData: nodeData || null
             });
           }, 200);
         });
@@ -268,7 +330,13 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
   };
 
   handleExampleChange = (e, { value }) => {
-    this.setState({ selectedExample: value });
+    // 查找对应的边数据路径
+    const selectedFile = this.state.exampleFiles.find(file => file.value === value);
+    this.setState({
+      selectedExample: value,
+      selectedEdgeDataPath: selectedFile?.edgeDataPath || "",
+      selectedNodeDataPath: selectedFile?.nodeDataPath || ""
+    });
   };
 
   render() {

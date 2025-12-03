@@ -24,9 +24,26 @@ const countLeafNodes = (node) => {
 };
 
 export default function SelectedNode(props) {
-  const { node, directed } = props;
+  const { node, directed, nodeData } = props;
   const [name, setName] = useState(node.name);
   const { dispatch } = useContext(Dispatch);
+  
+  // 获取节点详细信息
+  const getNodeDetails = () => {
+    if (!nodeData || !node.name) return null;
+    
+    // 遍历 nodeData 找到匹配 fact_name 的记录
+    for (const [factId, data] of nodeData.entries()) {
+      if (data.fact_name === node.name) {
+        return data;
+      }
+    }
+    
+    // 如果没找到，可能 name 就是 fact_id，直接查找
+    return nodeData.get(node.name);
+  };
+  
+  const nodeDetails = getNodeDetails();
 
   const handleChange = (e, { value }) => {
     node.name = value;
@@ -164,6 +181,26 @@ export default function SelectedNode(props) {
             size="tiny"
             content="Total (Visible)"
           />
+        </Table.Row>
+        }
+        {nodeDetails && nodeDetails.fact_detail &&
+        <Table.Row>
+          <Table.Cell colSpan="2" style={{ 
+            backgroundColor: '#f9f9f9', 
+            padding: '12px',
+            borderTop: '2px solid #ddd'
+          }}>
+            <div style={{ marginBottom: '8px' }}>
+              <strong style={{ color: '#2185d0' }}>详细描述</strong>
+            </div>
+            <div style={{ 
+              fontSize: '0.95em', 
+              lineHeight: '1.6',
+              color: '#333'
+            }}>
+              {nodeDetails.fact_detail}
+            </div>
+          </Table.Cell>
         </Table.Row>
         }
       </Table.Body>

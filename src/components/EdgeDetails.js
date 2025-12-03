@@ -14,6 +14,7 @@ export default class EdgeDetails extends React.Component {
   static propTypes = {
     node: PropTypes.object.isRequired,
     edgeData: PropTypes.array,
+    nodeData: PropTypes.object,
   };
 
   handleAccordionClick = (e, titleProps) => {
@@ -190,7 +191,7 @@ export default class EdgeDetails extends React.Component {
 
   // Get edges connected to this node from edgeData array
   getNodeEdges = (nodeId) => {
-    const { edgeData = [] } = this.props;
+    const { edgeData = [], nodeData } = this.props;
     
     if (!edgeData || edgeData.length === 0) {
       return [];
@@ -198,17 +199,29 @@ export default class EdgeDetails extends React.Component {
 
     const edges = [];
     
+    // 如果有 nodeData，通过 fact_name 反查 fact_id
+    let factId = nodeId;
+    if (nodeData) {
+      // 遍历 nodeData 找到匹配的 fact_id
+      for (const [id, data] of nodeData.entries()) {
+        if (data.fact_name === nodeId) {
+          factId = id;
+          break;
+        }
+      }
+    }
+    
     edgeData.forEach(edge => {
       const fromFactId = edge.from_fact_id || "";
       const toFactId = edge.to_fact_id || "";
       
       // Check if this edge connects to the current node
-      if (fromFactId === nodeId) {
+      if (fromFactId === factId) {
         edges.push({
           ...edge,
           isOutgoing: true
         });
-      } else if (toFactId === nodeId) {
+      } else if (toFactId === factId) {
         edges.push({
           ...edge,
           isOutgoing: false
@@ -220,13 +233,13 @@ export default class EdgeDetails extends React.Component {
   };
 
   render() {
-    const { node, edgeData } = this.props;
+    const { node, edgeData, nodeData } = this.props;
 
     if (!edgeData || edgeData.length === 0) {
       return null;
     }
 
-    // Get node's fact_id from name or physicalId
+    // Get node's fact_name or fact_id from name or physicalId
     const nodeId = node.name || node.physicalId;
     if (!nodeId) return null;
 

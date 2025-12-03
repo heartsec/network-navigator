@@ -26,49 +26,49 @@ export default function Settings(props) {
   return (
     <React.Fragment>
       <SliderCheckbox
-        label={`Module size based on: ${nodeSize}`}
+        label={`事实大小基于: ${nodeSize === 'flow' ? '风险权重' : '事实数量'}`}
         checked={nodeSize === "flow"}
         onChange={(e, { checked }) =>
           dispatch({ type: "nodeSize", value: checked ? "flow" : "nodes" })
         }
       />
       <SliderCheckbox
-        label={`Module radius scale: ${nodeScale}`}
+        label={`事实节点缩放: ${nodeScale === 'root' ? '平方根' : '线性'}`}
         checked={nodeScale === "root"}
         onChange={(e, { checked }) =>
           dispatch({ type: "nodeScale", value: checked ? "root" : "linear" })
         }
       />
       <SliderCheckbox
-        label={`Link width scale: ${linkScale}`}
+        label={`勾稽关系线宽: ${linkScale === 'root' ? '平方根' : '线性'}`}
         checked={linkScale === "root"}
         onChange={(e, { checked }) =>
           dispatch({ type: "linkScale", value: checked ? "root" : "linear" })
         }
       />
       <MyCheckbox
-        label="Show labels"
+        label="显示标签"
         checked={labelsVisible}
         onChange={(e, { checked }) =>
           dispatch({ type: "labelsVisible", value: checked })
         }
       />
       <MyCheckbox
-        label="Run simulation"
+        label="运行物理模拟"
         checked={simulationEnabled}
         onChange={(e, { checked }) =>
           dispatch({ type: "simulationEnabled", value: checked })
         }
       />
       <MyCheckbox
-        label="Use level of detail"
+        label="使用细节层次"
         checked={lodEnabled}
         onChange={(e, { checked }) =>
           dispatch({ type: "lodEnabled", value: checked })
         }
       />
       <Input
-        label={{ basic: true, content: "Node limit in modules" }}
+        label={{ basic: true, content: "类别事实数限制" }}
         type="number"
         size="small"
         value={nodeLimit}

@@ -22,7 +22,7 @@ export default function Search(props) {
   return <SearchInput
     fluid
     input={{ fluid: true }}
-    placeholder='Find nodes...'
+    placeholder='搜索事实...'
     onSearchChange={handleChange}
     results={results}
   />;

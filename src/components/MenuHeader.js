@@ -4,16 +4,10 @@ import { Header, Image } from "semantic-ui-react";
 
 export default function MenuHeader() {
   return <Header>
-    <Image
-      size="mini"
-      verticalAlign="middle"
-      src="//www.mapequation.org/assets/img/twocolormapicon_whiteboarder.svg"
-      alt="mapequation-icon"
-    />
     <div className="content">
-            <span className="brand">
-                <span className="brand-infomap">Infomap</span> <span className="brand-nn">Network Navigator</span>
-            </span>
+      <span className="brand">
+        <span className="brand-nn">信贷风险分析可视化</span>
+      </span>
     </div>
   </Header>;
 }

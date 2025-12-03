@@ -20,6 +20,8 @@ function reducer(state, action) {
       return { ...state, simulationEnabled: action.value };
     case "sidebarVisible":
       return { ...state, sidebarVisible: action.value };
+    case "sidebarWidth":
+      return { ...state, sidebarWidth: action.value };
     case "selectedNode":
       return { ...state, selectedNode: action.value };
     case "searchCallback":
@@ -47,6 +49,7 @@ export default function Layout(props) {
     labelsVisible: true,
     simulationEnabled: true,
     sidebarVisible: true,
+    sidebarWidth: 350,
     selectedNode: props.network,
     selectedNodeNameUpdatedBit: true,
     occurrences: null,
@@ -61,21 +64,23 @@ export default function Layout(props) {
       <SemanticSidebar.Pushable style={{ height: "100vh", overflow: "hidden" }}>
         <Sidebar {...state} {...props} />
         <SemanticSidebar.Pusher>
-          <Rail
-            internal
-            position="right"
-            style={{ padding: 0, margin: 0, height: 0, width: "182px" }}
-          >
-            <Menu vertical size="small">
-              <Menu.Item
-                icon="sidebar"
-                content="Show sidebar"
-                onClick={() =>
-                  dispatch({ type: "sidebarVisible", value: true })
-                }
-              />
-            </Menu>
-          </Rail>
+          {!state.sidebarVisible && (
+            <Rail
+              internal
+              position="right"
+              style={{ padding: 0, margin: 0, height: "auto", width: "auto", zIndex: 1000 }}
+            >
+              <Menu vertical size="small">
+                <Menu.Item
+                  icon="sidebar"
+                  content="显示侧边栏"
+                  onClick={() =>
+                    dispatch({ type: "sidebarVisible", value: true })
+                  }
+                />
+              </Menu>
+            </Rail>
+          )}
           <React.StrictMode>
             <NetworkNavigator {...state} {...props} />
           </React.StrictMode>

@@ -58,45 +58,50 @@ export default function SelectedNode(props) {
   const isRoot = node.path.toString() === "root";
 
   return (
-    <Table celled singleLine striped compact size="small">
+    <Table celled striped compact size="small">
       <Table.Body>
         <Table.Row>
           <Popup
-            trigger={<Table.Cell width={5} content='Name'/>}
+            trigger={<Table.Cell width={5} content='名称'/>}
             size='tiny'
-            content='The node name, or the names of the largest nodes contained within.'
+            content='事实名称或其包含的主要事实描述'
           />
-          <Table.Cell selectable style={{ padding: "0 0 0 8px" }}>
-            <Input
-              transparent
-              fluid
-              value={name}
-              onChange={handleChange}
-            />
+          <Table.Cell style={{ 
+            padding: "8px",
+            wordBreak: "break-word",
+            whiteSpace: "normal"
+          }}>
+            <div style={{
+              width: "100%",
+              wordBreak: "break-word",
+              whiteSpace: "pre-wrap"
+            }}>
+              {name}
+            </div>
           </Table.Cell>
         </Table.Row>
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Tree path'/>}
+            trigger={<Table.Cell content='树路径'/>}
             size='tiny'
-            content='Colon separated path in the tree from the root to finest-level modules.'
+            content='从根节点到最细级别模块的冒号分隔路径'
           />
           <Table.Cell content={node.path.toString()}/>
         </Table.Row>
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Flow'/>}
+            trigger={<Table.Cell content='风险权重'/>}
             size='tiny'
-            content='The flow contained in this node.'
+            content='该事实节点的风险重要度'
           />
           <Table.Cell content={(+node.flow).toPrecision(4)}/>
         </Table.Row>
         {node.enterFlow != null &&
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Enter flow'/>}
+            trigger={<Table.Cell content='风险流入'/>}
             size='tiny'
-            content='The module enter flow.'
+            content='流入该事实的风险关联度'
           />
           <Table.Cell content={(+node.enterFlow).toPrecision(4)}/>
         </Table.Row>
@@ -104,9 +109,9 @@ export default function SelectedNode(props) {
         {node.exitFlow != null &&
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Exit flow'/>}
+            trigger={<Table.Cell content='风险流出'/>}
             size='tiny'
-            content='The module exit flow.'
+            content='从该事实流出的风险关联度'
           />
           <Table.Cell content={(+node.exitFlow).toPrecision(4)}/>
         </Table.Row>
@@ -114,9 +119,9 @@ export default function SelectedNode(props) {
         {isRoot && directed &&
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='In degree'/>}
+            trigger={<Table.Cell content='被引用数'/>}
             size='tiny'
-            content='The number of incoming links to this node.'
+            content='其他事实引用该事实的勾稽关系数量'
           />
           <Table.Cell content={node.kin}/>
         </Table.Row>
@@ -124,9 +129,9 @@ export default function SelectedNode(props) {
         {isRoot && directed &&
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Out degree'/>}
+            trigger={<Table.Cell content='引用数'/>}
             size='tiny'
-            content='The number of outgoing links from this node.'
+            content='该事实引用其他事实的勾稽关系数量'
           />
           <Table.Cell content={node.kout}/>
         </Table.Row>
@@ -134,9 +139,9 @@ export default function SelectedNode(props) {
         {isRoot && !directed &&
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Degree'/>}
+            trigger={<Table.Cell content='关联数'/>}
             size='tiny'
-            content='The number of links to this node.'
+            content='与该事实相关的勾稽关系总数'
           />
           <Table.Cell content={node.kin + node.kout}/>
         </Table.Row>
@@ -144,42 +149,42 @@ export default function SelectedNode(props) {
         {node.nodes &&
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Nodes'/>}
+            trigger={<Table.Cell content='包含事实数'/>}
             size='tiny'
-            content='The number of nodes contained within this module.'
+            content='此类别中包含的事实节点数量'
           />
           <Popup
             trigger={<Table.Cell content={count(node.nodes)}/>}
             size='tiny'
-            content='Total (Visible)'
+            content='总数 (可见)'
           />
         </Table.Row>
         }
         {node.links &&
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Links'/>}
+            trigger={<Table.Cell content='勾稽关系数'/>}
             size='tiny'
-            content='The number of links contained within this module.'
+            content='此类别中的勾稽关系数量'
           />
           <Popup
             trigger={<Table.Cell content={count(node.links)}/>}
             size='tiny'
-            content='Total (Visible)'
+            content='总数 (可见)'
           />
         </Table.Row>
         }
         {node.totalChildren != null &&
         <Table.Row>
           <Popup
-            trigger={<Table.Cell content='Leaf nodes'/>}
+            trigger={<Table.Cell content='细节事实数'/>}
             size='tiny'
-            content='The number of leaf nodes contained within this module and its children.'
+            content='此类别及其子类别中包含的细节事实数量'
           />
           <Popup
             trigger={<Table.Cell content={countLeafNodes(node)}/>}
             size="tiny"
-            content="Total (Visible)"
+            content="总数 (可见)"
           />
         </Table.Row>
         }
@@ -196,7 +201,9 @@ export default function SelectedNode(props) {
             <div style={{ 
               fontSize: '0.95em', 
               lineHeight: '1.6',
-              color: '#333'
+              color: '#333',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word'
             }}>
               {nodeDetails.fact_detail}
             </div>

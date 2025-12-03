@@ -50,10 +50,11 @@ export default class EdgeDetails extends React.Component {
           active={isActive}
           index={index}
           onClick={this.handleAccordionClick}
+          style={{ fontSize: '0.9em' }}
         >
           <Icon name='dropdown' />
           <Icon name={this.getDirectionIcon(edge.direction, edge.isOutgoing)} />
-          <strong>{edge.relation_type || 'Unknown'}</strong>
+          <span style={{ fontWeight: '600' }}>{edge.relation_type || 'Unknown'}</span>
           <Label
             size="mini"
             color={this.getRiskPolarityColor(edge.risk_polarity)}
@@ -68,34 +69,34 @@ export default class EdgeDetails extends React.Component {
           )}
         </Accordion.Title>
         <Accordion.Content active={isActive}>
-          <Table basic='very' compact size='small'>
+          <Table basic='very' compact size='small' style={{ fontSize: '0.9em' }}>
             <Table.Body>
               {edge.reason_brief && (
                 <Table.Row>
-                  <Table.Cell width={4}>
-                    <strong>理由</strong>
+                  <Table.Cell width={4} style={{ color: '#666', fontWeight: '600' }}>
+                    理由
                   </Table.Cell>
-                  <Table.Cell>
-                    <em>{edge.reason_brief}</em>
+                  <Table.Cell style={{ fontStyle: 'italic', color: '#555' }}>
+                    {edge.reason_brief}
                   </Table.Cell>
                 </Table.Row>
               )}
               <Table.Row>
-                <Table.Cell>
-                  <strong>方向</strong>
+                <Table.Cell style={{ color: '#666', fontWeight: '600' }}>
+                  关系方向
                 </Table.Cell>
                 <Table.Cell>
-                  {edge.direction === 'directed' ? '有向' : '无向'}
+                  {edge.direction === 'directed' ? '单向勾稽' : '双向勾稽'}
                   {edge.direction === 'directed' && (
-                    <span style={{ marginLeft: '8px', color: '#999' }}>
-                      ({edge.isOutgoing ? '出边' : '入边'})
+                    <span style={{ marginLeft: '8px', color: '#999', fontSize: '0.9em' }}>
+                      ({edge.isOutgoing ? '引用' : '被引用'})
                     </span>
                   )}
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
-                <Table.Cell>
-                  <strong>连接节点</strong>
+                <Table.Cell style={{ color: '#666', fontWeight: '600' }}>
+                  关联事实
                 </Table.Cell>
                 <Table.Cell>
                   {edge.isOutgoing ? edge.to_fact_id : edge.from_fact_id}
@@ -103,8 +104,8 @@ export default class EdgeDetails extends React.Component {
               </Table.Row>
               {edge.from_entity_id && edge.to_entity_id && (
                 <Table.Row>
-                  <Table.Cell>
-                    <strong>实体</strong>
+                  <Table.Cell style={{ color: '#666', fontWeight: '600' }}>
+                    实体
                   </Table.Cell>
                   <Table.Cell>
                     {edge.from_entity_id} → {edge.to_entity_id}
@@ -113,16 +114,16 @@ export default class EdgeDetails extends React.Component {
               )}
               {edge.weight && (
                 <Table.Row>
-                  <Table.Cell>
-                    <strong>权重</strong>
+                  <Table.Cell style={{ color: '#666', fontWeight: '600' }}>
+                    权重
                   </Table.Cell>
                   <Table.Cell>{parseFloat(edge.weight).toFixed(2)}</Table.Cell>
                 </Table.Row>
               )}
               {edge.risk_tags && (
                 <Table.Row>
-                  <Table.Cell>
-                    <strong>风险标签</strong>
+                  <Table.Cell style={{ color: '#666', fontWeight: '600' }}>
+                    风险标签
                   </Table.Cell>
                   <Table.Cell>
                     {edge.risk_tags.split(',').map((tag, i) => (
@@ -135,8 +136,8 @@ export default class EdgeDetails extends React.Component {
               )}
               {edge.source_doc_ids && (
                 <Table.Row>
-                  <Table.Cell>
-                    <strong>来源文档</strong>
+                  <Table.Cell style={{ color: '#666', fontWeight: '600' }}>
+                    来源文档
                   </Table.Cell>
                   <Table.Cell>
                     {edge.source_doc_ids.split(',').map((doc, i) => (
@@ -149,18 +150,18 @@ export default class EdgeDetails extends React.Component {
               )}
               {edge.created_by_model && (
                 <Table.Row>
-                  <Table.Cell>
-                    <strong>创建模型</strong>
+                  <Table.Cell style={{ color: '#666', fontWeight: '600' }}>
+                    创建模型
                   </Table.Cell>
                   <Table.Cell>
-                    <code style={{ fontSize: '0.9em' }}>{edge.created_by_model}</code>
+                    <code style={{ fontSize: '0.85em', color: '#555' }}>{edge.created_by_model}</code>
                   </Table.Cell>
                 </Table.Row>
               )}
               {edge.human_label && edge.human_label !== 'unknown' && (
                 <Table.Row>
-                  <Table.Cell>
-                    <strong>人工标注</strong>
+                  <Table.Cell style={{ color: '#666', fontWeight: '600' }}>
+                    人工标注
                   </Table.Cell>
                   <Table.Cell>
                     <Label 
@@ -255,31 +256,36 @@ export default class EdgeDetails extends React.Component {
     const undirectedEdges = edges.filter(e => e.direction === 'undirected');
 
     return (
-      <div style={{ marginTop: '20px' }}>
-        <Header as="h4">
-          <Icon name="sitemap" />
-          <Header.Content>
-            边关系详情
-            <Popup
-              trigger={<Icon name="info circle" size="small" style={{ marginLeft: '8px' }} />}
-              content="显示该节点相关的所有边关系及其元数据信息"
-              size="tiny"
-            />
-          </Header.Content>
-        </Header>
+      <div style={{ marginTop: '16px' }}>
+        <div style={{ 
+          marginBottom: '8px',
+          fontSize: '0.9em',
+          fontWeight: '600',
+          color: '#333'
+        }}>
+          勾稽关系详情
+          <Popup
+            trigger={<Icon name="info circle" size="small" style={{ marginLeft: '6px', color: '#999' }} />}
+            content="显示该事实节点相关的所有勾稽关系及其元数据信息"
+            size="tiny"
+          />
+        </div>
 
         <div style={{ 
-          marginTop: '10px',
-          padding: '10px',
-          background: '#f9f9f9',
-          borderRadius: '4px'
+          marginBottom: '8px',
+          padding: '8px 10px',
+          background: '#f5f5f5',
+          borderRadius: '3px',
+          fontSize: '0.85em',
+          color: '#666'
         }}>
-          <div style={{ marginBottom: '10px', color: '#666', fontSize: '0.9em' }}>
-            总计 {edges.length} 条边关系
-            {outgoingEdges.length > 0 && ` | ${outgoingEdges.length} 出边`}
-            {incomingEdges.length > 0 && ` | ${incomingEdges.length} 入边`}
-            {undirectedEdges.length > 0 && ` | ${undirectedEdges.length} 无向边`}
-          </div>
+          总计 {edges.length} 条
+          {outgoingEdges.length > 0 && ` · ${outgoingEdges.length} 引用关系`}
+          {incomingEdges.length > 0 && ` · ${incomingEdges.length} 被引用关系`}
+          {undirectedEdges.length > 0 && ` · ${undirectedEdges.length} 互相关联`}
+        </div>
+
+        <div>
 
           <Accordion styled fluid>
             {edges.map((edge, index) => this.renderEdgeCard(edge, index))}

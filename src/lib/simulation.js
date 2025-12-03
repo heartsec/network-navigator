@@ -12,10 +12,10 @@ const maxFlow = (items) =>
 const minFlow = (items) =>
   items.reduce((min, item) => Math.min(min, item.flow), Infinity);
 
-const LINK_DISTANCE_MIN = 100;
-const LINK_DISTANCE_MAX = 250;
-const CHARGE = 500;
-const DISTANCE_MAX = 400;
+const LINK_DISTANCE_MIN = 50;
+const LINK_DISTANCE_MAX = 120;
+const CHARGE = 300;
+const DISTANCE_MAX = 250;
 const LINK_STRENGTH_MIN = 0.5;
 const LINK_STRENGTH_MAX = 1;
 const NODE_MASS_MIN = 0.5;

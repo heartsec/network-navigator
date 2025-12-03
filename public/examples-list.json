@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "filename": "citation_data.ftree",
+      "name": "Citation Network",
+      "description": "Citation network data example"
+    },
+    {
+      "filename": "tiny_fact_graph_valid.ftree",
+      "name": "Tiny Fact Graph",
+      "description": "Small fact graph for testing"
+    },
+    {
+      "filename": "tiny_fact_graph_with_fact_edge.ftree",
+      "name": "Tiny Fact Graph With Fact Edge",
+      "description": "Fact graph with fact edge data"
+    }
+  ]
+}

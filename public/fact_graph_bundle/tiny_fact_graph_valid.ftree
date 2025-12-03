@@ -1,0 +1,40 @@
+*Modules
+# path flow name exitFlow
+
+# 第 1 层：行业
+1 1.0 "Industry: Automotive" 0.1
+
+# 第 2 层：公司
+1:1 0.6 "Company A (parts supplier)" 0.05
+1:2 0.4 "Company B (car OEM)" 0.05
+
+# 第 3 层：Fact（聚合后的事实）
+# Company A 的两个 fact
+1:1:1 0.3 "Fact: A top customer B = 70% of revenue" 0
+1:1:2 0.3 "Fact: A mortgage LTV = 80%" 0
+
+# Company B 的一个 fact
+1:2:1 0.4 "Fact: B depends on supplier A for key parts" 0
+
+
+*Nodes
+# path flow name node
+1:1:1 0.3 "Fact: A top customer B = 70% of revenue" 1
+1:1:2 0.3 "Fact: A mortgage LTV = 80%" 2
+1:2:1 0.4 "Fact: B depends on supplier A for key parts" 3
+
+
+*Links directed
+#*Links path exitFlow numEdges numChildren
+
+# root 模块：1 个子模块（行业 1），不定义模块间边
+*Links root 0 0 1
+
+# 模块 1：2 个子模块（公司 1:1, 1:2），不定义公司间聚合边
+*Links 1 0.1 0 2
+
+# 模块 1:1：2 个子 fact，无内部边
+*Links 1:1 0.05 0 2
+
+# 模块 1:2：1 个子 fact，无内部边
+*Links 1:2 0.05 0 1

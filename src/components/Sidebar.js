@@ -10,6 +10,7 @@ import SelectedNode from "./SelectedNode";
 import Settings from "./Settings";
 import Dispatch from "../context/Dispatch";
 import Search from "./Search";
+import EdgeDetails from "./EdgeDetails";
 
 
 export default function Sidebar(props) {
@@ -18,7 +19,8 @@ export default function Sidebar(props) {
     filename,
     sidebarVisible,
     searchCallback,
-    selectedNode
+    selectedNode,
+    edgeData = []
   } = props;
 
   const { dispatch } = useContext(Dispatch);
@@ -52,6 +54,10 @@ export default function Sidebar(props) {
       <SelectedNode
         node={selectedNode}
         directed={network.directed}
+      />
+      <EdgeDetails
+        node={selectedNode}
+        edgeData={edgeData}
       />
       <Distributions
         nodes={selectedNode.nodes || []}

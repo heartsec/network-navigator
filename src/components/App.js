@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import Documentation from "./Documentation";
 import Header from "./Header";
 import Layout from "./Layout";
-import LoadNetwork from "./LoadNetwork";
+// import LoadNetwork from "./LoadNetworkDynamic";
+import LoadNetwork from "./LoadNetworkDynamicWithEdgeInfo";
 
 
 export default function App() {
   const initialState = {
     network: null,
-    filename: ""
+    filename: "",
+    edgeData: []
   };
 
   const [state, setState] = useState(initialState);

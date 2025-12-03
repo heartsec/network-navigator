@@ -15,36 +15,22 @@ import Background from "../images/Background.svg";
 import parseFTree from "../io/ftree";
 import networkFromFTree from "../io/network-from-ftree";
 import parseFile from "../io/parse-file";
-import parseEdgesFile from "../io/parse-edges";
 
 const errorState = (err) => ({
   progressError: true,
   progressLabel: err.toString(),
 });
 
-const exampleDataOptions = [
-  {
-    key: "citation_data",
-    text: "Citation Network",
-    value: "citation_data.ftree",
-    description: "Citation network data",
-  },
-  {
-    key: "tiny_fact_graph",
-    text: "Tiny Fact Graph",
-    value: "tiny_fact_graph_valid.ftree",
-    description: "Tiny fact graph example",
-  },
-];
-
-export default class LoadNetwork extends React.Component {
+export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
   state = {
     progressVisible: false,
     progressLabel: "",
     progressValue: 0,
     progressError: false,
     ftree: null,
-    selectedExample: "citation_data.ftree",
+    selectedExample: "",
+    exampleFiles: [],
+    loading: true,
   };
 
   static propTypes = {
@@ -63,7 +49,7 @@ export default class LoadNetwork extends React.Component {
       .then((network) => {
         if (!network) return;
 
-        const ftree = network.ftree_states ?? network.ftree
+        const ftree = network.ftree_states ?? network.ftree;
         if (!ftree) return;
 
         this.setState({ ftree });
@@ -72,11 +58,120 @@ export default class LoadNetwork extends React.Component {
         }
       })
       .catch((err) => console.error(err));
+
+    // 动态加载可用的示例文件列表
+    this.loadAvailableExamples();
   }
 
   componentWillUnmount() {
     clearTimeout(this.progressTimeout);
   }
+
+  // 动态获取 public 目录下的所有 .ftree 文件
+  loadAvailableExamples = async () => {
+    try {
+      // 尝试获取文件列表
+      const response = await fetch("/navigator/examples-list.json");
+      
+      if (response.ok) {
+        // 如果存在 examples-list.json，使用它
+        const data = await response.json();
+        const exampleFiles = data.files.map((file) => ({
+          key: file.filename.replace(".ftree", ""),
+          text: file.name || this.formatFileName(file.filename),
+          value: file.filename,
+          description: file.description || "",
+        }));
+        
+        this.setState({
+          exampleFiles,
+          selectedExample: exampleFiles[0]?.value || "",
+          loading: false,
+        });
+      } else {
+        // 如果不存在配置文件，使用默认列表
+        this.loadDefaultExamples();
+      }
+    } catch (err) {
+      console.log("Failed to load examples list, using defaults:", err);
+      this.loadDefaultExamples();
+    }
+  };
+
+  // 加载默认示例列表
+  loadDefaultExamples = () => {
+    const defaultExamples = [
+      "citation_data.ftree",
+      "tiny_fact_graph_valid.ftree",
+    ];
+
+    const exampleFiles = defaultExamples.map((filename) => ({
+      key: filename.replace(".ftree", ""),
+      text: this.formatFileName(filename),
+      value: filename,
+      description: "",
+    }));
+
+    this.setState({
+      exampleFiles,
+      selectedExample: exampleFiles[0]?.value || "",
+      loading: false,
+    });
+  };
+
+  // 格式化文件名为可读的标题
+  formatFileName = (filename) => {
+    return filename
+      .replace(".ftree", "")
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  // 加载边关系数据（TSV 格式）
+  loadEdgeData = async (filename) => {
+    try {
+      // 尝试加载对应的边数据文件
+      const baseName = filename.replace(".ftree", "");
+      const edgeFileName = `fact_graph_bundle/edges_full.tsv`;
+      
+      const response = await fetch(`/navigator/${edgeFileName}`);
+      
+      if (!response.ok) {
+        console.log(`No edge data file found for ${filename}`);
+        return null;
+      }
+
+      const text = await response.text();
+      const lines = text.trim().split("\n");
+      
+      if (lines.length < 2) {
+        console.log("Edge data file is empty");
+        return null;
+      }
+
+      // 解析 TSV 表头
+      const headers = lines[0].split("\t").map(h => h.trim());
+      
+      // 解析数据行
+      const edges = lines.slice(1).map(line => {
+        const values = line.split("\t");
+        const edge = {};
+        
+        headers.forEach((header, index) => {
+          edge[header] = values[index] ? values[index].trim() : "";
+        });
+        
+        return edge;
+      });
+
+      console.log(`Loaded ${edges.length} edge relationships`);
+      return edges;
+    } catch (err) {
+      console.log("Failed to load edge data:", err);
+      return null;
+    }
+  };
 
   loadNetwork = (file, name) => {
     if (!name && file && file.name) {
@@ -96,7 +191,7 @@ export default class LoadNetwork extends React.Component {
           progressValue: 2,
           progressLabel: "Parsing",
         }),
-      400,
+      400
     );
 
     return parseFile(file)
@@ -115,18 +210,26 @@ export default class LoadNetwork extends React.Component {
 
         const network = networkFromFTree(ftree);
 
-        // Try to load corresponding edges_full.tsv
-        this.loadEdgesForNetwork(name, network);
-
         this.setState({
           progressValue: 3,
-          progressLabel: "Success",
+          progressLabel: "Loading edge data...",
         });
 
-        this.progressTimeout = setTimeout(() => {
-          this.setState({ progressVisible: false });
-          this.props.onLoad({ network, filename: name });
-        }, 200);
+        // 尝试加载边关系数据
+        return this.loadEdgeData(name).then((edgeData) => {
+          this.setState({
+            progressLabel: "Success",
+          });
+
+          this.progressTimeout = setTimeout(() => {
+            this.setState({ progressVisible: false });
+            this.props.onLoad({ 
+              network, 
+              filename: name,
+              edgeData: edgeData || []
+            });
+          }, 200);
+        });
       })
       .catch((err) => {
         clearTimeout(this.progressTimeout);
@@ -135,44 +238,13 @@ export default class LoadNetwork extends React.Component {
       });
   };
 
-  loadEdgesForNetwork = (filename, network) => {
-    // Try to find edges_full.tsv in the same directory
-    let edgesPath = '';
-    
-    if (filename.includes('tiny_fact_graph')) {
-      edgesPath = '/navigator/fact_graph_bundle/edges_full.tsv';
-    } else if (filename.endsWith('.ftree')) {
-      // Try replacing .ftree with _edges_full.tsv or look in same dir
-      const baseDir = filename.substring(0, filename.lastIndexOf('/'));
-      edgesPath = `${baseDir}/edges_full.tsv`;
-    }
-
-    if (!edgesPath) return;
-
-    fetch(edgesPath)
-      .then(res => {
-        if (!res.ok) throw new Error('Edges file not found');
-        return res.text();
-      })
-      .then(tsvContent => {
-        const { edgeMap, errors } = parseEdgesFile(tsvContent);
-        
-        if (errors.length > 0) {
-          console.warn('Edge parsing errors:', errors);
-        }
-        
-        // Attach edge metadata to network
-        network.edgeMetadata = edgeMap;
-        console.log(`Loaded ${edgeMap.size} edge relationships`);
-      })
-      .catch(err => {
-        console.log('No edges file found or failed to load:', err.message);
-        network.edgeMetadata = new Map();
-      });
-  };
-
   loadExampleData = () => {
     const filename = this.state.selectedExample;
+
+    if (!filename) {
+      console.error("No example file selected");
+      return;
+    }
 
     this.setState({
       progressVisible: true,
@@ -182,7 +254,12 @@ export default class LoadNetwork extends React.Component {
     });
 
     fetch(`/navigator/${filename}`)
-      .then((res) => res.text())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to load ${filename}: ${res.statusText}`);
+        }
+        return res.text();
+      })
       .then((file) => this.loadNetwork(file, filename))
       .catch((err) => {
         this.setState(errorState(err));
@@ -202,6 +279,8 @@ export default class LoadNetwork extends React.Component {
       progressVisible,
       ftree,
       selectedExample,
+      exampleFiles,
+      loading,
     } = this.state;
 
     const disabled = progressVisible && !progressError;
@@ -224,30 +303,39 @@ export default class LoadNetwork extends React.Component {
         >
           <Label attached="top right">v {process.env.REACT_APP_VERSION}</Label>
 
-          <div style={{ marginBottom: "20px" }}>
-            <Dropdown
-              selection
-              disabled={disabled}
-              value={selectedExample}
-              options={exampleDataOptions}
-              onChange={this.handleExampleChange}
-              style={{ minWidth: "250px" }}
-            />
-          </div>
+          {loading ? (
+            <div style={{ padding: "20px" }}>Loading examples...</div>
+          ) : exampleFiles.length > 0 ? (
+            <>
+              <div style={{ marginBottom: "20px" }}>
+                <Dropdown
+                  selection
+                  disabled={disabled}
+                  value={selectedExample}
+                  options={exampleFiles}
+                  onChange={this.handleExampleChange}
+                  placeholder="Select an example"
+                  style={{ minWidth: "300px" }}
+                />
+              </div>
 
-          <Step.Group>
-            <Step
-              disabled={disabled}
-              icon="book"
-              title="Load example"
-              description={
-                exampleDataOptions.find((opt) => opt.value === selectedExample)
-                  ?.text || "Select example"
-              }
-              link
-              onClick={this.loadExampleData}
-            />
-          </Step.Group>
+              <Step.Group>
+                <Step
+                  disabled={disabled || !selectedExample}
+                  icon="book"
+                  title="Load example"
+                  description={
+                    exampleFiles.find((opt) => opt.value === selectedExample)
+                      ?.text || "Select example"
+                  }
+                  link
+                  onClick={this.loadExampleData}
+                />
+              </Step.Group>
+            </>
+          ) : (
+            <div style={{ padding: "20px" }}>No example files found</div>
+          )}
 
           {!!ftree && (
             <React.Fragment>

@@ -364,108 +364,115 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       <div style={background}>
         <Segment
           as={Container}
-          text
           textAlign="center"
-          style={{ padding: "50px 0px" }}
+          style={{ padding: "50px 40px", maxWidth: "1200px" }}
           padded="very"
         >
           <Label attached="top right">v {process.env.REACT_APP_VERSION}</Label>
 
           {loading ? (
-            <div style={{ padding: "20px" }}>Loading examples...</div>
+            <div style={{ padding: "20px" }}>加载示例中...</div>
           ) : exampleFiles.length > 0 ? (
-            <>
-              <div style={{ marginBottom: "20px" }}>
-                <Dropdown
-                  selection
-                  disabled={disabled}
-                  value={selectedExample}
-                  options={exampleFiles}
-                  onChange={this.handleExampleChange}
-                  placeholder="Select an example"
-                  style={{ minWidth: "300px" }}
-                />
+            <div style={{ 
+              display: "flex", 
+              alignItems: "stretch", 
+              justifyContent: "center",
+              gap: "30px",
+              minHeight: "200px",
+              padding: "20px 0"
+            }}>
+              {/* 左侧：加载示例数据 */}
+              <div style={{ 
+                flex: 1, 
+                display: "flex", 
+                flexDirection: "column", 
+                alignItems: "center",
+                padding: "10px",
+                maxWidth: "450px"
+              }}>
+                <h3 style={{ marginBottom: "20px", color: "#333", fontSize: "1.2em" }}>加载示例数据</h3>
+                <div style={{ marginBottom: "20px", width: "100%" }}>
+                  <Dropdown
+                    selection
+                    disabled={disabled}
+                    value={selectedExample}
+                    options={exampleFiles}
+                    onChange={this.handleExampleChange}
+                    placeholder="选择示例"
+                    style={{ width: "100%", maxWidth: "320px" }}
+                  />
+                </div>
+                <Step.Group style={{ margin: 0 }}>
+                  <Step
+                    disabled={disabled || !selectedExample}
+                    icon="book"
+                    title="加载示例"
+                    description={
+                      exampleFiles.find((opt) => opt.value === selectedExample)
+                        ?.text || "选择示例"
+                    }
+                    link
+                    onClick={this.loadExampleData}
+                    style={{ padding: "1em 2em" }}
+                  />
+                </Step.Group>
               </div>
 
-              <Step.Group>
-                <Step
-                  disabled={disabled || !selectedExample}
-                  icon="book"
-                  title="Load example"
-                  description={
-                    exampleFiles.find((opt) => opt.value === selectedExample)
-                      ?.text || "Select example"
-                  }
-                  link
-                  onClick={this.loadExampleData}
-                />
-              </Step.Group>
-            </>
-          ) : (
-            <div style={{ padding: "20px" }}>No example files found</div>
-          )}
+              {/* 中间分隔线 */}
+              <div style={{ 
+                display: "flex", 
+                flexDirection: "column", 
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0 20px"
+              }}>
+                <div style={{ 
+                  width: "2px", 
+                  height: "60px", 
+                  background: "linear-gradient(to bottom, transparent, #ccc, #ccc)"
+                }} />
+                <div style={{ 
+                  padding: "15px 0",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  color: "#666"
+                }}>OR</div>
+                <div style={{ 
+                  width: "2px", 
+                  height: "60px", 
+                  background: "linear-gradient(to bottom, #ccc, #ccc, transparent)"
+                }} />
+              </div>
 
-          {!!ftree && (
-            <React.Fragment>
-              <Divider hidden />
-
-              <Step.Group>
-                <Step
-                  disabled={disabled}
-                  link
-                  onClick={() => this.loadNetwork(ftree, "infomap.ftree")}
-                >
-                  <Image
-                    spaced="right"
-                    size="tiny"
+              {/* 右侧：上传文件 */}
+              <div style={{ 
+                flex: 1, 
+                display: "flex", 
+                flexDirection: "column", 
+                alignItems: "center",
+                padding: "10px",
+                maxWidth: "450px"
+              }}>
+                <h3 style={{ marginBottom: "20px", color: "#333", fontSize: "1.2em" }}>上传本地文件</h3>
+                <Step.Group style={{ margin: 0 }}>
+                  <Step
                     disabled={disabled}
-                    verticalAlign="middle"
-                    src="//www.mapequation.org/assets/img/twocolormapicon_whiteboarder.svg"
-                    alt="mapequation-icon"
+                    as="label"
+                    link
+                    active={!disabled}
+                    icon="upload"
+                    title="选择 .ftree 文件"
+                    description="点击上传网络数据"
+                    htmlFor="upload"
+                    style={{ padding: "1em 2em" }}
                   />
-                  <Step.Content>
-                    <Step.Title>
-                      Open from{" "}
-                      <span className="brand brand-infomap">Infomap</span>{" "}
-                      <span className="brand brand-nn">Online</span>
-                    </Step.Title>
-                  </Step.Content>
-                </Step>
-              </Step.Group>
-            </React.Fragment>
+                </Step.Group>
+              </div>
+            </div>
+          ) : (
+            <div style={{ padding: "20px" }}>未找到示例文件</div>
           )}
 
-          <Divider
-            horizontal
-            style={{ margin: "20px 100px 30px 100px" }}
-            content="Or"
-          />
-
-          <Step.Group ordered>
-            <Step
-              disabled={disabled}
-              link
-              as="a"
-              href="//www.mapequation.org/infomap"
-            >
-              <Step.Content>
-                <Step.Title>Cluster network with Infomap</Step.Title>
-                <Step.Description>
-                  Command line version or{" "}
-                  <span className="brand brand-infomap">Infomap</span>{" "}
-                  <span className="brand brand-nn">Online</span>
-                </Step.Description>
-              </Step.Content>
-            </Step>
-            <Step
-              disabled={disabled}
-              as="label"
-              link
-              active={!disabled}
-              title="Load ftree file"
-              htmlFor="upload"
-            />
-          </Step.Group>
           <input
             style={{ visibility: "hidden" }}
             type="file"

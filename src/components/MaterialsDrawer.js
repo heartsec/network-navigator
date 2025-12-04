@@ -8,6 +8,7 @@ export default function MaterialsDrawer(props) {
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [sortBy, setSortBy] = useState("usage"); // usage, priority, name
+  const [selectedMaterialId, setSelectedMaterialId] = useState(null); // 追踪选中的资料项
 
   // 构建资料项到事实ID的映射
   const materialFactsMap = useMemo(() => {
@@ -101,6 +102,9 @@ export default function MaterialsDrawer(props) {
     console.log("关联的事实IDs:", material.factIds);
     console.log("发送 dispatch action: highlightFacts");
     
+    // 设置选中状态
+    setSelectedMaterialId(material.id);
+    
     dispatch({
       type: "highlightFacts",
       value: [...material.factIds] // 创建新数组，确保触发 React 更新
@@ -123,38 +127,40 @@ export default function MaterialsDrawer(props) {
 
   return (
     <>
-      <Button
-        circular
-        icon
-        size="huge"
-        color="teal"
-        style={{
-          position: "fixed",
-          bottom: "30px",
-          left: "30px",
-          zIndex: 998,
-          boxShadow: "0 4px 12px rgba(0,0,0,0.2)"
-        }}
-        onClick={() => setOpen(!open)}
-      >
-        <Icon name="book" />
-      </Button>
+      {!open && (
+        <Button
+          circular
+          icon
+          size="large"
+          color="teal"
+          style={{
+            position: "fixed",
+            bottom: "30px",
+            left: "20px",
+            zIndex: 1000,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+          }}
+          onClick={() => setOpen(true)}
+        >
+          <Icon name="book" />
+        </Button>
+      )}
 
       {open && (
         <div
           style={{
             position: "fixed",
-            bottom: 0,
-            left: 0,
-            width: "400px",
+            bottom: "20px",
+            left: "20px",
+            width: "350px",
             maxWidth: "90vw",
-            height: "70vh",
+            maxHeight: "60vh",
             backgroundColor: "white",
-            boxShadow: "2px 0 8px rgba(0,0,0,0.15)",
-            zIndex: 999,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            zIndex: 1000,
             display: "flex",
             flexDirection: "column",
-            borderTopRightRadius: "8px",
+            borderRadius: "8px",
             overflow: "hidden"
           }}
         >
@@ -162,7 +168,7 @@ export default function MaterialsDrawer(props) {
           style={{
             margin: 0,
             borderRadius: 0,
-            padding: "16px",
+            padding: "10px 14px",
             backgroundColor: "#f8f9fa",
             borderBottom: "2px solid #e0e0e0"
           }}
@@ -171,16 +177,19 @@ export default function MaterialsDrawer(props) {
             display: "flex", 
             alignItems: "center", 
             justifyContent: "space-between",
-            marginBottom: "12px"
+            marginBottom: "8px"
           }}>
-            <h3 style={{ margin: 0, color: "#2185d0" }}>
-              <Icon name="book" /> 资料清单
-            </h3>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <Icon name="book" color="blue" size="small" />
+              <strong style={{ fontSize: "0.95em", color: "#2185d0" }}>
+                资料清单
+              </strong>
+            </div>
             <Icon 
               name="close" 
               link 
               onClick={() => setOpen(false)}
-              style={{ cursor: "pointer", fontSize: "1.2em" }}
+              style={{ cursor: "pointer", fontSize: "0.9em", color: "#666" }}
             />
           </div>
           
@@ -188,23 +197,23 @@ export default function MaterialsDrawer(props) {
             icon="search"
             placeholder="搜索资料项..."
             fluid
-            size="small"
+            size="mini"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            style={{ marginBottom: "10px" }}
+            style={{ marginBottom: "8px", fontSize: "0.85em" }}
           />
           
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "0.9em", color: "#666" }}>排序:</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ fontSize: "0.8em", color: "#666" }}>排序:</span>
             <Dropdown
               compact
               selection
               options={sortOptions}
               value={sortBy}
               onChange={(e, { value }) => setSortBy(value)}
-              style={{ minWidth: "120px" }}
+              style={{ minWidth: "100px", fontSize: "0.85em" }}
             />
-            <Label size="small" color="blue">
+            <Label size="mini" color="blue">
               {sortedMaterials.length} 项
             </Label>
           </div>
@@ -213,74 +222,82 @@ export default function MaterialsDrawer(props) {
         <div style={{ 
           flex: 1, 
           overflowY: "auto", 
-          padding: "12px" 
+          padding: "10px" 
         }}>
           <List divided relaxed>
-            {sortedMaterials.map((material) => (
+            {sortedMaterials.map((material) => {
+              const isSelected = selectedMaterialId === material.id;
+              return (
               <List.Item
                 key={material.id}
                 style={{
-                  padding: "12px",
+                  padding: "8px",
                   cursor: "pointer",
                   borderRadius: "4px",
-                  transition: "background-color 0.2s"
+                  transition: "background-color 0.2s",
+                  backgroundColor: isSelected ? "#e3f2fd" : "transparent",
+                  border: isSelected ? "2px solid #2185d0" : "2px solid transparent"
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f0f8ff"}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                onMouseEnter={(e) => {
+                  if (!isSelected) e.currentTarget.style.backgroundColor = "#f0f8ff";
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) e.currentTarget.style.backgroundColor = "transparent";
+                }}
                 onClick={() => handleMaterialClick(material)}
               >
                 <List.Content>
                   <div style={{ 
                     display: "flex", 
                     alignItems: "center", 
-                    gap: "8px",
-                    marginBottom: "6px"
+                    gap: "6px",
+                    marginBottom: "4px"
                   }}>
                     <strong style={{ 
-                      fontSize: "0.95em",
+                      fontSize: "0.85em",
                       flex: 1,
                       color: "#333"
                     }}>
                       {material.name}
                     </strong>
-                    <Label size="small" color="blue" circular>
+                    <Label size="mini" color="blue" circular>
                       {material.usageCount}
                     </Label>
                   </div>
                   
                   <div style={{ 
                     display: "flex", 
-                    gap: "6px", 
-                    marginBottom: "6px",
+                    gap: "4px", 
+                    marginBottom: "4px",
                     flexWrap: "wrap"
                   }}>
-                    <Label size="tiny" color={difficultyColor(material.difficulty)}>
+                    <Label size="mini" color={difficultyColor(material.difficulty)} style={{ fontSize: "0.7em" }}>
                       难度 {"★".repeat(material.difficulty)}
                     </Label>
-                    <Label size="tiny" basic>
+                    <Label size="mini" basic style={{ fontSize: "0.7em" }}>
                       优先级 {material.priority}
                     </Label>
                   </div>
                   
                   <div style={{ 
-                    fontSize: "0.75em", 
+                    fontSize: "0.7em", 
                     color: "#666",
-                    marginBottom: "6px",
+                    marginBottom: "4px",
                     lineHeight: "1.4"
                   }}>
                     {material.reason}
                   </div>
                   
                   <div style={{ 
-                    fontSize: "0.7em", 
+                    fontSize: "0.65em", 
                     color: "#999",
                     display: "flex",
                     flexWrap: "wrap",
-                    gap: "4px"
+                    gap: "3px"
                   }}>
                     <span>用于事实:</span>
                     {material.factIds.slice(0, 5).map(factId => (
-                      <Label key={factId} size="mini" basic color="grey">
+                      <Label key={factId} size="mini" basic color="grey" style={{ fontSize: "0.7em", padding: "2px 4px" }}>
                         {factId}
                       </Label>
                     ))}
@@ -292,9 +309,9 @@ export default function MaterialsDrawer(props) {
                   </div>
                   
                   {material.files && material.files.length > 0 && (
-                    <div style={{ marginTop: "6px" }}>
+                    <div style={{ marginTop: "4px" }}>
                       {material.files.map((file, idx) => (
-                        <Label key={idx} size="tiny" as="a" color="teal">
+                        <Label key={idx} size="mini" as="a" color="teal" style={{ fontSize: "0.7em" }}>
                           <Icon name="paperclip" /> {file.name}
                         </Label>
                       ))}
@@ -302,17 +319,18 @@ export default function MaterialsDrawer(props) {
                   )}
                 </List.Content>
               </List.Item>
-            ))}
+              );
+            })}
           </List>
           
           {sortedMaterials.length === 0 && (
             <div style={{ 
               textAlign: "center", 
-              padding: "40px 20px",
+              padding: "30px 15px",
               color: "#999"
             }}>
-              <Icon name="search" size="big" style={{ opacity: 0.3 }} />
-              <div style={{ marginTop: "10px" }}>
+              <Icon name="search" size="large" style={{ opacity: 0.3 }} />
+              <div style={{ marginTop: "8px", fontSize: "0.85em" }}>
                 未找到相关资料项
               </div>
             </div>

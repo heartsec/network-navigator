@@ -3,6 +3,7 @@ import { Menu, Rail, Sidebar as SemanticSidebar } from "semantic-ui-react";
 import NetworkNavigator from "./NetworkNavigator";
 import Sidebar from "./Sidebar";
 import CaseRecordFloater from "./CaseRecordFloater";
+import MaterialsDrawer from "./MaterialsDrawer";
 import Dispatch from "../context/Dispatch";
 
 function reducer(state, action) {
@@ -36,6 +37,13 @@ function reducer(state, action) {
       return { ...state, occurrences: action.value };
     case "lodEnabled":
       return { ...state, lodEnabled: action.value };
+    case "highlightFacts":
+      console.log("=== Layout.reducer: 接收到 highlightFacts action ===");
+      console.log("action.value (要高亮的事实IDs):", action.value);
+      console.log("当前 state.highlightedFacts:", state.highlightedFacts);
+      const newState = { ...state, highlightedFacts: action.value };
+      console.log("新的 state.highlightedFacts:", newState.highlightedFacts);
+      return newState;
     default:
       throw new Error();
   }
@@ -56,6 +64,7 @@ export default function Layout(props) {
     occurrences: null,
     lodEnabled: true,
     searchCallback: () => null,
+    highlightedFacts: null,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -63,6 +72,11 @@ export default function Layout(props) {
   return (
     <Dispatch.Provider value={{ dispatch }}>
       <CaseRecordFloater caseRecord={props.caseRecord} />
+      <MaterialsDrawer 
+        nodeInfo={props.nodeInfo}
+        materialPriority={props.materialPriority}
+        network={props.network}
+      />
       <SemanticSidebar.Pushable style={{ height: "100vh", overflow: "hidden" }}>
         <Sidebar {...state} {...props} />
         <SemanticSidebar.Pusher>

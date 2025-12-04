@@ -13,7 +13,8 @@ export default function App() {
     edgeData: [],
     nodeData: null,
     nodeInfo: null,
-    caseRecord: null
+    caseRecord: null,
+    materialPriority: null
   };
 
   const [state, setState] = useState(initialState);

@@ -33,6 +33,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     selectedNodeDataPath: "",
     selectedNodeInfoPath: "",
     selectedCaseRecordPath: "",
+    selectedMaterialPriorityPath: "",
     exampleFiles: [],
     loading: true,
   };
@@ -89,6 +90,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           nodeDataPath: file.nodeDataPath || "",
           nodeInfoPath: file.nodeInfoPath || "",
           caseRecordPath: file.caseRecordPath || "",
+          materialPriorityPath: file.materialPriorityPath || "",
         }));
         
         this.setState({
@@ -98,6 +100,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           selectedNodeDataPath: exampleFiles[0]?.nodeDataPath || "",
           selectedNodeInfoPath: exampleFiles[0]?.nodeInfoPath || "",
           selectedCaseRecordPath: exampleFiles[0]?.caseRecordPath || "",
+          selectedMaterialPriorityPath: exampleFiles[0]?.materialPriorityPath || "",
           loading: false,
         });
       } else {
@@ -264,6 +267,29 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     }
   };
 
+  loadMaterialPriority = async (materialPriorityPath) => {
+    try {
+      if (!materialPriorityPath) {
+        console.log("No material priority path specified");
+        return null;
+      }
+      
+      const response = await fetch(`/navigator/${materialPriorityPath}`);
+      
+      if (!response.ok) {
+        console.log(`No material priority file found at ${materialPriorityPath}`);
+        return null;
+      }
+
+      const materialPriority = await response.json();
+      console.log("Loaded material priority");
+      return materialPriority;
+    } catch (err) {
+      console.error("Error loading material priority:", err);
+      return null;
+    }
+  };
+
   // 加载边关系数据（TSV 格式）
   loadEdgeData = async (edgeDataPath) => {
     try {
@@ -353,13 +379,14 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           progressLabel: "Loading additional data...",
         });
 
-        // 同时加载边关系数据、节点数据、溯源信息和案例记录
+        // 同时加载边关系数据、节点数据、溯源信息、案例记录和资料优先级
         return Promise.all([
           this.loadEdgeData(this.state.selectedEdgeDataPath),
           this.loadNodeData(this.state.selectedNodeDataPath),
           this.loadNodeInfo(this.state.selectedNodeInfoPath),
-          this.loadCaseRecord(this.state.selectedCaseRecordPath)
-        ]).then(([edgeData, nodeData, nodeInfo, caseRecord]) => {
+          this.loadCaseRecord(this.state.selectedCaseRecordPath),
+          this.loadMaterialPriority(this.state.selectedMaterialPriorityPath)
+        ]).then(([edgeData, nodeData, nodeInfo, caseRecord, materialPriority]) => {
           this.setState({
             progressLabel: "Success",
           });
@@ -372,7 +399,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
               edgeData: edgeData || [],
               nodeData: nodeData || null,
               nodeInfo: nodeInfo || null,
-              caseRecord: caseRecord || null
+              caseRecord: caseRecord || null,
+              materialPriority: materialPriority || null
             });
           }, 200);
         });
@@ -421,7 +449,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       selectedEdgeDataPath: selectedFile?.edgeDataPath || "",
       selectedNodeDataPath: selectedFile?.nodeDataPath || "",
       selectedNodeInfoPath: selectedFile?.nodeInfoPath || "",
-      selectedCaseRecordPath: selectedFile?.caseRecordPath || ""
+      selectedCaseRecordPath: selectedFile?.caseRecordPath || "",
+      selectedMaterialPriorityPath: selectedFile?.materialPriorityPath || ""
     });
   };
 

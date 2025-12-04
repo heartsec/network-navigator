@@ -1,0 +1,196 @@
+{
+  "materials": [
+    {
+      "id": "m01",
+      "name": "企业及担保人基本资料（身份证、营业执照等）",
+      "priority": 1,
+      "difficulty": 1,
+      "reason": "随时可提供，不敏感",
+      "files": []
+    },
+    {
+      "id": "m02",
+      "name": "工商登记与股权结构",
+      "priority": 2,
+      "difficulty": 1,
+      "reason": "公示系统可查，标准化",
+      "files": []
+    },
+    {
+      "id": "m03",
+      "name": "对公银行流水（部分）",
+      "priority": 3,
+      "difficulty": 2,
+      "reason": "企业通常能导出，但有时需要登录网银",
+      "files": []
+    },
+    {
+      "id": "m04",
+      "name": "司法、执行、失信信息",
+      "priority": 4,
+      "difficulty": 1,
+      "reason": "公示网可查，放款前必须查看",
+      "files": []
+    },
+    {
+      "id": "m05",
+      "name": "纳税申报表、纳税记录（完税证明）",
+      "priority": 5,
+      "difficulty": 2,
+      "reason": "税务系统导出即可，但老板较敏感",
+      "files": []
+    },
+    {
+      "id": "m06",
+      "name": "财务报表（资产负债表、利润表等）",
+      "priority": 6,
+      "difficulty": 3,
+      "reason": "小微企业财务不规范，需要会计整理",
+      "files": []
+    },
+    {
+      "id": "m07",
+      "name": "担保人/实际控制人收入证明",
+      "priority": 7,
+      "difficulty": 2,
+      "reason": "需要单位出具，有些商户为自雇难开具",
+      "files": []
+    },
+    {
+      "id": "m08",
+      "name": "发票与税务数据（具体开票明细）",
+      "priority": 8,
+      "difficulty": 4,
+      "reason": "涉及商业敏感信息，不愿全量提供",
+      "files": []
+    },
+    {
+      "id": "m09",
+      "name": "合同资料（租赁合同等）",
+      "priority": 9,
+      "difficulty": 3,
+      "reason": "需搜集，容易遗漏，需要核实真实性",
+      "files": []
+    },
+    {
+      "id": "m10",
+      "name": "关联企业及关联交易信息",
+      "priority": 10,
+      "difficulty": 4,
+      "reason": "小微企业关联账不规范，不愿暴露真实关联",
+      "files": []
+    },
+    {
+      "id": "m11",
+      "name": "担保人征信与资产证明",
+      "priority": 11,
+      "difficulty": 4,
+      "reason": "需授权，有时需跑网点，有隐私担忧",
+      "files": []
+    },
+    {
+      "id": "m12",
+      "name": "抵押物评估报告",
+      "priority": 12,
+      "difficulty": 5,
+      "reason": "需委托评估公司，流程长，费用高",
+      "files": []
+    },
+    {
+      "id": "m13",
+      "name": "企业基本资料（开户许可证）",
+      "priority": 13,
+      "difficulty": 1,
+      "reason": "开户时已提供，银行留存",
+      "files": []
+    },
+    {
+      "id": "m14",
+      "name": "银行流水（个人）",
+      "priority": 14,
+      "difficulty": 2,
+      "reason": "个人客户通常配合提供",
+      "files": []
+    },
+    {
+      "id": "m15",
+      "name": "担保合同",
+      "priority": 15,
+      "difficulty": 1,
+      "reason": "签约时提供",
+      "files": []
+    },
+    {
+      "id": "m16",
+      "name": "不动产登记查询",
+      "priority": 16,
+      "difficulty": 2,
+      "reason": "需授权或本人配合查询",
+      "files": []
+    },
+    {
+      "id": "m17",
+      "name": "信贷系统记录",
+      "priority": 17,
+      "difficulty": 1,
+      "reason": "行内系统直接查询",
+      "files": []
+    },
+    {
+      "id": "m18",
+      "name": "贷审会决议文件",
+      "priority": 18,
+      "difficulty": 1,
+      "reason": "内部文件，审批后自动生成",
+      "files": []
+    },
+    {
+      "id": "m19",
+      "name": "授信审批系统记录",
+      "priority": 19,
+      "difficulty": 1,
+      "reason": "行内系统直接查询",
+      "files": []
+    },
+    {
+      "id": "m20",
+      "name": "访谈记录、意向协议",
+      "priority": 20,
+      "difficulty": 2,
+      "reason": "客户经理整理，质量依赖经验",
+      "files": []
+    },
+    {
+      "id": "m21",
+      "name": "公开信息查询、村委会证明",
+      "priority": 21,
+      "difficulty": 2,
+      "reason": "需跨部门协调",
+      "files": []
+    },
+    {
+      "id": "m22",
+      "name": "实地走访",
+      "priority": 22,
+      "difficulty": 2,
+      "reason": "需安排时间现场核查",
+      "files": []
+    },
+    {
+      "id": "m23",
+      "name": "租赁合同、银行流水（租金入账）",
+      "priority": 23,
+      "difficulty": 2,
+      "reason": "需客户配合提供",
+      "files": []
+    },
+    {
+      "id": "m24",
+      "name": "无（属预测性陈述）",
+      "priority": 99,
+      "difficulty": 0,
+      "reason": "无实际资料，仅为预测",
+      "files": []
+    }
+  ]
+}

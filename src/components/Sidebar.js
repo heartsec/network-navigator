@@ -99,10 +99,26 @@ export default function Sidebar(props) {
       visible={sidebarVisible}
       vertical
     >
-    <Menu.Item header>
+    <Menu.Item header style={{ position: 'relative' }}>
       <MenuHeader/>
+      <i 
+        aria-hidden="true" 
+        className="close icon" 
+        onClick={() => dispatch({ type: "sidebarVisible", value: false })}
+        style={{
+          position: 'absolute',
+          right: '10px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          cursor: 'pointer',
+          fontSize: '1.2em',
+          color: '#666',
+          transition: 'color 0.2s'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.color = '#000'}
+        onMouseLeave={(e) => e.currentTarget.style.color = '#666'}
+      />
     </Menu.Item>
-    <Menu.Item onClick={() => dispatch({ type: "sidebarVisible", value: false })} icon='close' content='隐藏侧边栏'/>
     <Menu.Item>
       <Search onChange={searchCallback}/>
     </Menu.Item>

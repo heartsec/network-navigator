@@ -57,7 +57,7 @@ export default function Layout(props) {
     linkScale: "root",
     labelsVisible: true,
     simulationEnabled: true,
-    sidebarVisible: true,
+    sidebarVisible: false,
     sidebarWidth: 350,
     selectedNode: props.network,
     selectedNodeNameUpdatedBit: true,
@@ -86,14 +86,21 @@ export default function Layout(props) {
               position="right"
               style={{ padding: 0, margin: 0, height: "auto", width: "auto", zIndex: 1000 }}
             >
-              <Menu vertical size="small">
+              <Menu vertical size="small" style={{ minWidth: '120px' }}>
                 <Menu.Item
-                  icon="sidebar"
-                  content="显示侧边栏"
                   onClick={() =>
                     dispatch({ type: "sidebarVisible", value: true })
                   }
-                />
+                  style={{ cursor: 'pointer', padding: '10px' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <i className="sidebar icon" style={{ margin: 0 }}></i>
+                    <div style={{ fontSize: '0.85em', lineHeight: '1.3' }}>
+                      <div><strong>{props.nodeData ? props.nodeData.size : 0}</strong> 事实</div>
+                      <div><strong>{props.edgeData ? props.edgeData.length : 0}</strong> 勾稽</div>
+                    </div>
+                  </div>
+                </Menu.Item>
               </Menu>
             </Rail>
           )}

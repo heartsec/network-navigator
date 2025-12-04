@@ -156,6 +156,8 @@ export default class NetworkNavigator extends React.Component {
     layout.on("click", (node) => {
       console.log(node);
       dispatch({ type: "selectedNode", value: node });
+      // 选中节点时自动打开侧边栏
+      dispatch({ type: "sidebarVisible", value: true });
       this.layouts.forEach((l) => l.clearSelectedNodes());
     });
 

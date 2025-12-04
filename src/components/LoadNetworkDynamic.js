@@ -71,7 +71,7 @@ export default class LoadNetworkDynamic extends React.Component {
   loadAvailableExamples = async () => {
     try {
       // 尝试获取文件列表
-      const response = await fetch("/navigator/examples-list.json");
+      const response = await fetch(`${process.env.PUBLIC_URL}/examples-list.json`);
       
       if (response.ok) {
         // 如果存在 examples-list.json，使用它
@@ -197,7 +197,7 @@ export default class LoadNetworkDynamic extends React.Component {
       progressError: false,
     });
 
-    fetch(`/navigator/${filename}`)
+    fetch(`${process.env.PUBLIC_URL}/${filename}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Failed to load ${filename}: ${res.statusText}`);

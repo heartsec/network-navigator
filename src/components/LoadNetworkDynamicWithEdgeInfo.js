@@ -76,7 +76,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
   loadAvailableExamples = async () => {
     try {
       // 尝试获取文件列表
-      const response = await fetch("/navigator/examples-list.json");
+      const response = await fetch(`${process.env.PUBLIC_URL}/examples-list.json`);
       
       if (response.ok) {
         // 如果存在 examples-list.json，使用它
@@ -151,7 +151,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
         return null;
       }
       
-      const response = await fetch(`/navigator/${nodeDataPath}`);
+      const response = await fetch(`${process.env.PUBLIC_URL}/${nodeDataPath}`);
       
       if (!response.ok) {
         console.log(`No node data file found at ${nodeDataPath}`);
@@ -201,7 +201,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
         return null;
       }
       
-      const response = await fetch(`/navigator/${nodeInfoPath}`);
+      const response = await fetch(`${process.env.PUBLIC_URL}/${nodeInfoPath}`);
       
       if (!response.ok) {
         console.log(`No node info file found at ${nodeInfoPath}`);
@@ -251,7 +251,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
         return null;
       }
       
-      const response = await fetch(`/navigator/${caseRecordPath}`);
+      const response = await fetch(`${process.env.PUBLIC_URL}/${caseRecordPath}`);
       
       if (!response.ok) {
         console.log(`No case record file found at ${caseRecordPath}`);
@@ -274,7 +274,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
         return null;
       }
       
-      const response = await fetch(`/navigator/${materialPriorityPath}`);
+      const response = await fetch(`${process.env.PUBLIC_URL}/${materialPriorityPath}`);
       
       if (!response.ok) {
         console.log(`No material priority file found at ${materialPriorityPath}`);
@@ -299,7 +299,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
         return null;
       }
       
-      const response = await fetch(`/navigator/${edgeDataPath}`);
+      const response = await fetch(`${process.env.PUBLIC_URL}/${edgeDataPath}`);
       
       if (!response.ok) {
         console.log(`No edge data file found at ${edgeDataPath}`);
@@ -427,7 +427,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       progressError: false,
     });
 
-    fetch(`/navigator/${filename}`)
+    fetch(`${process.env.PUBLIC_URL}/${filename}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Failed to load ${filename}: ${res.statusText}`);

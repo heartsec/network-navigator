@@ -140,7 +140,7 @@ export default class LoadNetwork extends React.Component {
     let edgesPath = '';
     
     if (filename.includes('tiny_fact_graph')) {
-      edgesPath = '/navigator/fact_graph_bundle/edges_full.tsv';
+      edgesPath = 'fact_graph_bundle/edges_full.tsv';
     } else if (filename.endsWith('.ftree')) {
       // Try replacing .ftree with _edges_full.tsv or look in same dir
       const baseDir = filename.substring(0, filename.lastIndexOf('/'));
@@ -181,7 +181,7 @@ export default class LoadNetwork extends React.Component {
       progressError: false,
     });
 
-    fetch(`/navigator/${filename}`)
+    fetch(`${process.env.PUBLIC_URL}/${filename}`)
       .then((res) => res.text())
       .then((file) => this.loadNetwork(file, filename))
       .catch((err) => {

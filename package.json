@@ -1,7 +1,7 @@
 {
   "name": "infomap-network-navigator",
   "version": "1.2.0",
-  "homepage": "/navigator",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "cross-env": "^10.1.0",

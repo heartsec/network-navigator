@@ -31,6 +31,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     selectedExample: "",
     selectedEdgeDataPath: "",
     selectedNodeDataPath: "",
+    selectedNodeInfoPath: "",
     exampleFiles: [],
     loading: true,
   };
@@ -85,6 +86,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           description: file.description || "",
           edgeDataPath: file.edgeDataPath || "",
           nodeDataPath: file.nodeDataPath || "",
+          nodeInfoPath: file.nodeInfoPath || "",
         }));
         
         this.setState({
@@ -92,6 +94,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           selectedExample: exampleFiles[0]?.value || "",
           selectedEdgeDataPath: exampleFiles[0]?.edgeDataPath || "",
           selectedNodeDataPath: exampleFiles[0]?.nodeDataPath || "",
+          selectedNodeInfoPath: exampleFiles[0]?.nodeInfoPath || "",
           loading: false,
         });
       } else {
@@ -180,6 +183,56 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       return nodeMap;
     } catch (err) {
       console.error("Error loading node data:", err);
+      return null;
+    }
+  };
+
+  // 加载节点溯源信息（TSV 格式）
+  loadNodeInfo = async (nodeInfoPath) => {
+    try {
+      if (!nodeInfoPath) {
+        console.log("No node info path specified");
+        return null;
+      }
+      
+      const response = await fetch(`/navigator/${nodeInfoPath}`);
+      
+      if (!response.ok) {
+        console.log(`No node info file found at ${nodeInfoPath}`);
+        return null;
+      }
+
+      const text = await response.text();
+      const lines = text.trim().split("\n");
+      
+      if (lines.length < 2) {
+        console.log("Node info file is empty");
+        return null;
+      }
+
+      // 解析 TSV 表头
+      const headers = lines[0].split("\t").map(h => h.trim());
+      
+      // 创建 fact_id -> node info 的映射
+      const nodeInfoMap = new Map();
+      
+      lines.slice(1).forEach(line => {
+        const values = line.split("\t");
+        const info = {};
+        
+        headers.forEach((header, index) => {
+          info[header] = values[index] ? values[index].trim() : "";
+        });
+        
+        if (info.fact_id) {
+          nodeInfoMap.set(info.fact_id, info);
+        }
+      });
+      
+      console.log(`Loaded ${nodeInfoMap.size} node info records`);
+      return nodeInfoMap;
+    } catch (err) {
+      console.error("Error loading node info:", err);
       return null;
     }
   };
@@ -273,11 +326,12 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           progressLabel: "Loading additional data...",
         });
 
-        // 同时加载边关系数据和节点数据
+        // 同时加载边关系数据、节点数据和溯源信息
         return Promise.all([
           this.loadEdgeData(this.state.selectedEdgeDataPath),
-          this.loadNodeData(this.state.selectedNodeDataPath)
-        ]).then(([edgeData, nodeData]) => {
+          this.loadNodeData(this.state.selectedNodeDataPath),
+          this.loadNodeInfo(this.state.selectedNodeInfoPath)
+        ]).then(([edgeData, nodeData, nodeInfo]) => {
           this.setState({
             progressLabel: "Success",
           });
@@ -288,7 +342,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
               network, 
               filename: name,
               edgeData: edgeData || [],
-              nodeData: nodeData || null
+              nodeData: nodeData || null,
+              nodeInfo: nodeInfo || null
             });
           }, 200);
         });
@@ -335,7 +390,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     this.setState({
       selectedExample: value,
       selectedEdgeDataPath: selectedFile?.edgeDataPath || "",
-      selectedNodeDataPath: selectedFile?.nodeDataPath || ""
+      selectedNodeDataPath: selectedFile?.nodeDataPath || "",
+      selectedNodeInfoPath: selectedFile?.nodeInfoPath || ""
     });
   };
 

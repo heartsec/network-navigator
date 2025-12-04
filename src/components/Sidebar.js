@@ -22,7 +22,8 @@ export default function Sidebar(props) {
     searchCallback,
     selectedNode,
     edgeData = [],
-    nodeData = null
+    nodeData = null,
+    nodeInfo = null
   } = props;
 
   const { dispatch } = useContext(Dispatch);
@@ -120,6 +121,7 @@ export default function Sidebar(props) {
                   node={selectedNode}
                   directed={network.directed}
                   nodeData={nodeData}
+                  nodeInfo={nodeInfo}
                 />
                 <EdgeDetails
                   node={selectedNode}

@@ -10,7 +10,9 @@ export default function App() {
   const initialState = {
     network: null,
     filename: "",
-    edgeData: []
+    edgeData: [],
+    nodeData: null,
+    nodeInfo: null
   };
 
   const [state, setState] = useState(initialState);

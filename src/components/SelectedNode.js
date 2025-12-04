@@ -24,7 +24,7 @@ const countLeafNodes = (node) => {
 };
 
 export default function SelectedNode(props) {
-  const { node, directed, nodeData } = props;
+  const { node, directed, nodeData, nodeInfo } = props;
   const [name, setName] = useState(node.name);
   const { dispatch } = useContext(Dispatch);
   
@@ -43,7 +43,29 @@ export default function SelectedNode(props) {
     return nodeData.get(node.name);
   };
   
+  // 获取节点溯源信息
+  const getNodeInfo = () => {
+    if (!nodeInfo || !node.name) return null;
+    
+    // 先尝试通过 nodeData 获取 fact_id
+    const details = getNodeDetails();
+    if (details && details.fact_id) {
+      return nodeInfo.get(details.fact_id);
+    }
+    
+    // 如果没有 nodeData，尝试通过 fact_name 匹配
+    for (const [factId, info] of nodeInfo.entries()) {
+      if (info.fact_name === node.name) {
+        return info;
+      }
+    }
+    
+    // 最后尝试直接用 node.name 作为 fact_id
+    return nodeInfo.get(node.name);
+  };
+  
   const nodeDetails = getNodeDetails();
+  const infoDetails = getNodeInfo();
 
   const handleChange = (e, { value }) => {
     node.name = value;
@@ -188,6 +210,42 @@ export default function SelectedNode(props) {
           />
         </Table.Row>
         }
+        {infoDetails && infoDetails.fact_id &&
+        <Table.Row>
+          <Popup
+            trigger={<Table.Cell content='事实ID'/>}
+            size='tiny'
+            content='事实在系统中的唯一标识符'
+          />
+          <Table.Cell style={{ 
+            fontFamily: 'monospace',
+            fontWeight: 'bold',
+            color: '#2185d0'
+          }}>
+            {infoDetails.fact_id}
+          </Table.Cell>
+        </Table.Row>
+        }
+        {infoDetails && infoDetails.category &&
+        <Table.Row>
+          <Popup
+            trigger={<Table.Cell content='所属段落'/>}
+            size='tiny'
+            content='事实所属的分类类别'
+          />
+          <Table.Cell>
+            <span style={{
+              padding: '4px 8px',
+              backgroundColor: '#e8f4f8',
+              borderRadius: '3px',
+              fontSize: '0.9em',
+              color: '#1678c2'
+            }}>
+              {infoDetails.category}
+            </span>
+          </Table.Cell>
+        </Table.Row>
+        }
         {nodeDetails && nodeDetails.fact_detail &&
         <Table.Row>
           <Table.Cell colSpan="2" style={{ 
@@ -196,7 +254,7 @@ export default function SelectedNode(props) {
             borderTop: '2px solid #ddd'
           }}>
             <div style={{ marginBottom: '8px' }}>
-              <strong style={{ color: '#2185d0' }}>详细描述</strong>
+              <strong style={{ color: '#2185d0' }}>📊 详细描述</strong>
             </div>
             <div style={{ 
               fontSize: '0.95em', 
@@ -206,6 +264,71 @@ export default function SelectedNode(props) {
               wordBreak: 'break-word'
             }}>
               {nodeDetails.fact_detail}
+            </div>
+          </Table.Cell>
+        </Table.Row>
+        }
+        {infoDetails && infoDetails.check_points &&
+        <Table.Row>
+          <Table.Cell colSpan="2" style={{ 
+            backgroundColor: '#fff9f0', 
+            padding: '12px',
+            borderLeft: '4px solid #f2711c'
+          }}>
+            <div style={{ marginBottom: '6px' }}>
+              <strong style={{ color: '#f2711c' }}>⚠️ 核查要点</strong>
+            </div>
+            <div style={{ 
+              fontSize: '0.9em', 
+              lineHeight: '1.6',
+              color: '#333',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word'
+            }}>
+              {infoDetails.check_points}
+            </div>
+          </Table.Cell>
+        </Table.Row>
+        }
+        {infoDetails && infoDetails.primary_source &&
+        <Table.Row>
+          <Table.Cell colSpan="2" style={{ 
+            backgroundColor: '#f0f8ff', 
+            padding: '12px',
+            borderTop: '2px solid #d4e9f7'
+          }}>
+            <div style={{ marginBottom: '6px' }}>
+              <strong style={{ color: '#1678c2' }}>✅ 主要资料来源</strong>
+            </div>
+            <div style={{ 
+              fontSize: '0.9em', 
+              lineHeight: '1.6',
+              color: '#333',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word'
+            }}>
+              {infoDetails.primary_source}
+            </div>
+          </Table.Cell>
+        </Table.Row>
+        }
+        {infoDetails && infoDetails.secondary_source &&
+        <Table.Row>
+          <Table.Cell colSpan="2" style={{ 
+            backgroundColor: '#fafafa', 
+            padding: '12px'
+          }}>
+            <div style={{ marginBottom: '6px' }}>
+              <strong style={{ color: '#767676' }}>� 辅助资料来源</strong>
+            </div>
+            <div style={{ 
+              fontSize: '0.85em', 
+              lineHeight: '1.5',
+              color: '#555',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word'
+            }}>
+              {infoDetails.secondary_source}
             </div>
           </Table.Cell>
         </Table.Row>

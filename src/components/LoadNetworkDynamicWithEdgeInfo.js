@@ -566,22 +566,35 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
                 flexDirection: "column", 
                 alignItems: "center",
                 padding: "10px",
-                maxWidth: "450px"
+                maxWidth: "450px",
+                opacity: 0.5
               }}>
-                <h3 style={{ marginBottom: "20px", color: "#333", fontSize: "1.2em" }}>上传本地文件</h3>
+                <h3 style={{ marginBottom: "20px", color: "#999", fontSize: "1.2em" }}>上传待审会议记录</h3>
                 <Step.Group style={{ margin: 0 }}>
                   <Step
-                    disabled={disabled}
-                    as="label"
-                    link
-                    active={!disabled}
+                    disabled={true}
+                    link={false}
+                    active={false}
                     icon="upload"
-                    title="选择 .ftree 文件"
-                    description="点击上传网络数据"
-                    htmlFor="upload"
-                    style={{ padding: "1em 2em" }}
+                    title="上传会议记录文件"
+                    description="功能未开通"
+                    style={{ 
+                      padding: "1em 2em",
+                      cursor: "not-allowed",
+                      opacity: 0.6
+                    }}
                   />
                 </Step.Group>
+                <div style={{ 
+                  marginTop: "10px", 
+                  fontSize: "0.85em", 
+                  color: "#999",
+                  textAlign: "center"
+                }}>
+                  上传贷审会会记录：如贷款审议小组会议纪要
+                  <br />
+                  <span style={{ fontSize: "0.9em", fontStyle: "italic" }}>（即将开放）</span>
+                </div>
               </div>
             </div>
           ) : (
@@ -595,6 +608,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
             onChange={() => this.loadNetwork(this.input.files[0])}
             accept=".ftree"
             ref={(input) => (this.input = input)}
+            disabled={true}
           />
 
           {progressVisible && (

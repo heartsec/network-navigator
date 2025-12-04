@@ -6,7 +6,8 @@
       "description": "基于智能体输出的事实标签映射和风险传递边生成的可视化数据",
       "edgeDataPath": "credit_case_ai_bundle/credit_case_edges_ai.tsv",
       "nodeDataPath": "credit_case_ai_bundle/credit_case_nodes_ai.tsv",
-      "nodeInfoPath": "credit_case_ai_bundle/credit_case_nodes_ai_info.tsv"
+      "nodeInfoPath": "credit_case_ai_bundle/credit_case_nodes_ai_info.tsv",
+      "caseRecordPath": "credit_case_ai_bundle/case_record.json"
     }
   ]
 }

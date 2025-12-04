@@ -2,6 +2,7 @@ import React, { useReducer } from "react";
 import { Menu, Rail, Sidebar as SemanticSidebar } from "semantic-ui-react";
 import NetworkNavigator from "./NetworkNavigator";
 import Sidebar from "./Sidebar";
+import CaseRecordFloater from "./CaseRecordFloater";
 import Dispatch from "../context/Dispatch";
 
 function reducer(state, action) {
@@ -61,6 +62,7 @@ export default function Layout(props) {
 
   return (
     <Dispatch.Provider value={{ dispatch }}>
+      <CaseRecordFloater caseRecord={props.caseRecord} />
       <SemanticSidebar.Pushable style={{ height: "100vh", overflow: "hidden" }}>
         <Sidebar {...state} {...props} />
         <SemanticSidebar.Pusher>

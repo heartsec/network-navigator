@@ -32,6 +32,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     selectedEdgeDataPath: "",
     selectedNodeDataPath: "",
     selectedNodeInfoPath: "",
+    selectedCaseRecordPath: "",
     exampleFiles: [],
     loading: true,
   };
@@ -87,6 +88,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           edgeDataPath: file.edgeDataPath || "",
           nodeDataPath: file.nodeDataPath || "",
           nodeInfoPath: file.nodeInfoPath || "",
+          caseRecordPath: file.caseRecordPath || "",
         }));
         
         this.setState({
@@ -95,6 +97,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           selectedEdgeDataPath: exampleFiles[0]?.edgeDataPath || "",
           selectedNodeDataPath: exampleFiles[0]?.nodeDataPath || "",
           selectedNodeInfoPath: exampleFiles[0]?.nodeInfoPath || "",
+          selectedCaseRecordPath: exampleFiles[0]?.caseRecordPath || "",
           loading: false,
         });
       } else {
@@ -237,6 +240,30 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     }
   };
 
+  // 加载案例记录（JSON 格式）
+  loadCaseRecord = async (caseRecordPath) => {
+    try {
+      if (!caseRecordPath) {
+        console.log("No case record path specified");
+        return null;
+      }
+      
+      const response = await fetch(`/navigator/${caseRecordPath}`);
+      
+      if (!response.ok) {
+        console.log(`No case record file found at ${caseRecordPath}`);
+        return null;
+      }
+
+      const caseRecord = await response.json();
+      console.log("Loaded case record");
+      return caseRecord;
+    } catch (err) {
+      console.error("Error loading case record:", err);
+      return null;
+    }
+  };
+
   // 加载边关系数据（TSV 格式）
   loadEdgeData = async (edgeDataPath) => {
     try {
@@ -326,12 +353,13 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           progressLabel: "Loading additional data...",
         });
 
-        // 同时加载边关系数据、节点数据和溯源信息
+        // 同时加载边关系数据、节点数据、溯源信息和案例记录
         return Promise.all([
           this.loadEdgeData(this.state.selectedEdgeDataPath),
           this.loadNodeData(this.state.selectedNodeDataPath),
-          this.loadNodeInfo(this.state.selectedNodeInfoPath)
-        ]).then(([edgeData, nodeData, nodeInfo]) => {
+          this.loadNodeInfo(this.state.selectedNodeInfoPath),
+          this.loadCaseRecord(this.state.selectedCaseRecordPath)
+        ]).then(([edgeData, nodeData, nodeInfo, caseRecord]) => {
           this.setState({
             progressLabel: "Success",
           });
@@ -343,7 +371,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
               filename: name,
               edgeData: edgeData || [],
               nodeData: nodeData || null,
-              nodeInfo: nodeInfo || null
+              nodeInfo: nodeInfo || null,
+              caseRecord: caseRecord || null
             });
           }, 200);
         });
@@ -391,7 +420,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       selectedExample: value,
       selectedEdgeDataPath: selectedFile?.edgeDataPath || "",
       selectedNodeDataPath: selectedFile?.nodeDataPath || "",
-      selectedNodeInfoPath: selectedFile?.nodeInfoPath || ""
+      selectedNodeInfoPath: selectedFile?.nodeInfoPath || "",
+      selectedCaseRecordPath: selectedFile?.caseRecordPath || ""
     });
   };
 

@@ -12,7 +12,8 @@ export default function App() {
     filename: "",
     edgeData: [],
     nodeData: null,
-    nodeInfo: null
+    nodeInfo: null,
+    caseRecord: null
   };
 
   const [state, setState] = useState(initialState);

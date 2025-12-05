@@ -76,6 +76,7 @@ export default function Layout(props) {
         nodeInfo={props.nodeInfo}
         materialPriority={props.materialPriority}
         network={props.network}
+        highlightedFacts={state.highlightedFacts}
       />
       <SemanticSidebar.Pushable style={{ height: "100vh", overflow: "hidden" }}>
         <Sidebar {...state} {...props} />

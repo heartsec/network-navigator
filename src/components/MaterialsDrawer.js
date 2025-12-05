@@ -1,14 +1,21 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useMemo, useContext, useEffect } from "react";
 import { Button, List, Input, Label, Icon, Segment, Dropdown } from "semantic-ui-react";
 import Dispatch from "../context/Dispatch";
 
 export default function MaterialsDrawer(props) {
-  const { nodeInfo, materialPriority, network } = props;
+  const { nodeInfo, materialPriority, network, highlightedFacts } = props;
   const { dispatch } = useContext(Dispatch);
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [sortBy, setSortBy] = useState("usage"); // usage, priority, name
   const [selectedMaterialId, setSelectedMaterialId] = useState(null); // 追踪选中的资料项
+
+  // 当外部取消高亮时，取消选中状态
+  useEffect(() => {
+    if (!highlightedFacts) {
+      setSelectedMaterialId(null);
+    }
+  }, [highlightedFacts]);
 
   // 构建资料项到事实ID的映射
   const materialFactsMap = useMemo(() => {

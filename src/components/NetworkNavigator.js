@@ -205,8 +205,8 @@ export default class NetworkNavigator extends React.Component {
     });
 
     svg.select(".background").on("click", () => {
-      console.log(network);
-      dispatch({ type: "selectedNode", value: network });
+      console.log("Background clicked");
+      dispatch({ type: "selectedNode", value: null });
       dispatch({ type: "highlightFacts", value: null });
       this.layouts.forEach((l) => l.clearSelectedNodes());
     });

@@ -59,7 +59,7 @@ export default function Layout(props) {
     simulationEnabled: true,
     sidebarVisible: false,
     sidebarWidth: 350,
-    selectedNode: props.network,
+    selectedNode: null,
     selectedNodeNameUpdatedBit: true,
     occurrences: null,
     lodEnabled: true,

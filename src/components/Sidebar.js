@@ -124,26 +124,34 @@ export default function Sidebar(props) {
     </Menu.Item>
     <Menu.Item style={{ padding: 0 }}>
       <Tab 
-        menu={{ secondary: true, pointing: true }} 
+        menu={{ secondary: true, pointing: true, style: { display: 'flex', justifyContent: 'flex-start' } }} 
         panes={[
           {
-            menuItem: '事实详情',
+            menuItem: '风险分析',
             render: () => (
               <Tab.Pane style={{ border: 'none', padding: '1em' }}>
-                <Header as="h4">
-                  {selectedNode.physicalId ? "选中事实" : "选中类别"}
-                </Header>
-                <SelectedNode
-                  node={selectedNode}
-                  directed={network.directed}
-                  nodeData={nodeData}
-                  nodeInfo={nodeInfo}
-                />
-                <EdgeDetails
-                  node={selectedNode}
-                  edgeData={edgeData}
-                  nodeData={nodeData}
-                />
+                {selectedNode ? (
+                  <>
+                    <Header as="h4">
+                      {selectedNode.physicalId ? "选中事实" : "选中类别"}
+                    </Header>
+                    <SelectedNode
+                      node={selectedNode}
+                      directed={network.directed}
+                      nodeData={nodeData}
+                      nodeInfo={nodeInfo}
+                    />
+                    <EdgeDetails
+                      node={selectedNode}
+                      edgeData={edgeData}
+                      nodeData={nodeData}
+                    />
+                  </>
+                ) : (
+                  <div style={{ padding: '2em', textAlign: 'center', color: '#999' }}>
+                    请在图中选择一个节点以查看详情
+                  </div>
+                )}
                 {/* 暂时隐藏：Flow 和 Degree 分布图 */}
                 {/* <Distributions
                   nodes={selectedNode.nodes || []}

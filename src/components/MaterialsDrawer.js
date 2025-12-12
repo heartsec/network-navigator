@@ -9,6 +9,12 @@ export default function MaterialsDrawer(props) {
   const [searchText, setSearchText] = useState("");
   const [sortBy, setSortBy] = useState("usage"); // usage, priority, name
   const [selectedMaterialId, setSelectedMaterialId] = useState(null); // 追踪选中的资料项
+  
+  // 添加宽度和高度状态
+  const [drawerWidth, setDrawerWidth] = useState(350);
+  const [drawerHeight, setDrawerHeight] = useState(60); // 百分比
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizeType, setResizeType] = useState(null); // 'width' or 'height'
 
   // 当外部取消高亮时，取消选中状态
   useEffect(() => {
@@ -16,6 +22,65 @@ export default function MaterialsDrawer(props) {
       setSelectedMaterialId(null);
     }
   }, [highlightedFacts]);
+
+  // 处理拖拽调整大小
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const handleMouseMove = (e) => {
+      if (resizeType === 'width') {
+        // 调整宽度：从左边界到鼠标位置
+        const newWidth = e.clientX - 20; // 减去左边距
+        setDrawerWidth(Math.max(250, Math.min(1600, newWidth))); // 增加到1600px
+      } else if (resizeType === 'height') {
+        // 调整高度：从底部到鼠标位置
+        const windowHeight = window.innerHeight;
+        const newHeight = ((windowHeight - e.clientY - 20) / windowHeight) * 100; // 转换为百分比
+        setDrawerHeight(Math.max(30, Math.min(80, newHeight)));
+      } else if (resizeType === 'both') {
+        // 同时调整宽度和高度
+        const newWidth = e.clientX - 20;
+        setDrawerWidth(Math.max(250, Math.min(1600, newWidth))); // 增加到1600px
+        
+        const windowHeight = window.innerHeight;
+        const newHeight = ((windowHeight - e.clientY - 20) / windowHeight) * 100;
+        setDrawerHeight(Math.max(30, Math.min(80, newHeight)));
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      setResizeType(null);
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = '';
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing, resizeType]);
+
+  // 开始调整宽度
+  const startResizeWidth = (e) => {
+    e.preventDefault();
+    setIsResizing(true);
+    setResizeType('width');
+    document.body.style.cursor = 'ew-resize';
+    document.body.style.userSelect = 'none';
+  };
+
+  // 开始调整高度
+  const startResizeHeight = (e) => {
+    e.preventDefault();
+    setIsResizing(true);
+    setResizeType('height');
+    document.body.style.cursor = 'ns-resize';
+    document.body.style.userSelect = 'none';
+  };
 
   // 构建资料项到事实ID的映射
   const materialFactsMap = useMemo(() => {
@@ -159,9 +224,9 @@ export default function MaterialsDrawer(props) {
             position: "fixed",
             bottom: "20px",
             left: "20px",
-            width: "350px",
-            maxWidth: "90vw",
-            maxHeight: "60vh",
+            width: `${drawerWidth}px`,
+            maxWidth: "none", // 移除宽度限制
+            maxHeight: `${drawerHeight}vh`,
             backgroundColor: "white",
             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
             zIndex: 1000,
@@ -171,6 +236,66 @@ export default function MaterialsDrawer(props) {
             overflow: "hidden"
           }}
         >
+        {/* 顶部调整高度手柄 */}
+        <div
+          onMouseDown={startResizeHeight}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "6px",
+            cursor: "ns-resize",
+            backgroundColor: "transparent",
+            zIndex: 1001,
+            transition: "background-color 0.2s"
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(33, 133, 208, 0.3)'}
+          onMouseLeave={(e) => !isResizing && (e.currentTarget.style.backgroundColor = 'transparent')}
+        />
+        
+        {/* 右侧调整宽度手柄 */}
+        <div
+          onMouseDown={startResizeWidth}
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            width: "6px",
+            cursor: "ew-resize",
+            backgroundColor: "transparent",
+            zIndex: 1001,
+            transition: "background-color 0.2s"
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(33, 133, 208, 0.3)'}
+          onMouseLeave={(e) => !isResizing && (e.currentTarget.style.backgroundColor = 'transparent')}
+        />
+        
+        {/* 右上角调整宽高手柄 */}
+        <div
+          onMouseDown={(e) => {
+            e.preventDefault();
+            setIsResizing(true);
+            setResizeType('both');
+            document.body.style.cursor = 'nesw-resize';
+            document.body.style.userSelect = 'none';
+          }}
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "12px",
+            height: "12px",
+            cursor: "nesw-resize",
+            backgroundColor: "transparent",
+            zIndex: 1002,
+            transition: "background-color 0.2s"
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(33, 133, 208, 0.5)'}
+          onMouseLeave={(e) => !isResizing && (e.currentTarget.style.backgroundColor = 'transparent')}
+        />
+        
         <Segment
           style={{
             margin: 0,

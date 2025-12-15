@@ -8,7 +8,8 @@
       "nodeDataPath": "credit_case_ai_bundle/credit_case_nodes_ai.tsv",
       "nodeInfoPath": "credit_case_ai_bundle/credit_case_nodes_ai_info.tsv",
       "caseRecordPath": "credit_case_ai_bundle/case_record.json",
-      "materialPriorityPath": "credit_case_ai_bundle/material_priority.json"
+      "materialPriorityPath": "credit_case_ai_bundle/material_priority.json",
+      "annotationsPath": "credit_case_ai_bundle/case_annotations.json"
     }
   ]
 }

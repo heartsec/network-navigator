@@ -91,6 +91,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           nodeInfoPath: file.nodeInfoPath || "",
           caseRecordPath: file.caseRecordPath || "",
           materialPriorityPath: file.materialPriorityPath || "",
+          annotationsPath: file.annotationsPath || "",
         }));
         
         this.setState({
@@ -101,6 +102,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           selectedNodeInfoPath: exampleFiles[0]?.nodeInfoPath || "",
           selectedCaseRecordPath: exampleFiles[0]?.caseRecordPath || "",
           selectedMaterialPriorityPath: exampleFiles[0]?.materialPriorityPath || "",
+          selectedAnnotationsPath: exampleFiles[0]?.annotationsPath || "",
           loading: false,
         });
       } else {
@@ -290,6 +292,30 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     }
   };
 
+  // 加载标注数据（JSON 格式）
+  loadAnnotations = async (annotationsPath) => {
+    try {
+      if (!annotationsPath) {
+        console.log("No annotations path specified");
+        return null;
+      }
+      
+      const response = await fetch(`${process.env.PUBLIC_URL}/${annotationsPath}`);
+      
+      if (!response.ok) {
+        console.log(`No annotations file found at ${annotationsPath}`);
+        return null;
+      }
+
+      const annotations = await response.json();
+      console.log("Loaded annotations:", annotations.statistics);
+      return annotations;
+    } catch (err) {
+      console.error("Error loading annotations:", err);
+      return null;
+    }
+  };
+
   // 加载边关系数据（TSV 格式）
   loadEdgeData = async (edgeDataPath) => {
     try {
@@ -379,14 +405,15 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
           progressLabel: "Loading additional data...",
         });
 
-        // 同时加载边关系数据、节点数据、溯源信息、案例记录和资料优先级
+        // 同时加载边关系数据、节点数据、溯源信息、案例记录、资料优先级和标注数据
         return Promise.all([
           this.loadEdgeData(this.state.selectedEdgeDataPath),
           this.loadNodeData(this.state.selectedNodeDataPath),
           this.loadNodeInfo(this.state.selectedNodeInfoPath),
           this.loadCaseRecord(this.state.selectedCaseRecordPath),
-          this.loadMaterialPriority(this.state.selectedMaterialPriorityPath)
-        ]).then(([edgeData, nodeData, nodeInfo, caseRecord, materialPriority]) => {
+          this.loadMaterialPriority(this.state.selectedMaterialPriorityPath),
+          this.loadAnnotations(this.state.selectedAnnotationsPath)
+        ]).then(([edgeData, nodeData, nodeInfo, caseRecord, materialPriority, annotations]) => {
           this.setState({
             progressLabel: "Success",
           });
@@ -400,7 +427,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
               nodeData: nodeData || null,
               nodeInfo: nodeInfo || null,
               caseRecord: caseRecord || null,
-              materialPriority: materialPriority || null
+              materialPriority: materialPriority || null,
+              annotations: annotations || null
             });
           }, 200);
         });
@@ -450,7 +478,8 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       selectedNodeDataPath: selectedFile?.nodeDataPath || "",
       selectedNodeInfoPath: selectedFile?.nodeInfoPath || "",
       selectedCaseRecordPath: selectedFile?.caseRecordPath || "",
-      selectedMaterialPriorityPath: selectedFile?.materialPriorityPath || ""
+      selectedMaterialPriorityPath: selectedFile?.materialPriorityPath || "",
+      selectedAnnotationsPath: selectedFile?.annotationsPath || ""
     });
   };
 

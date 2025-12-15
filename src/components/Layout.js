@@ -71,7 +71,10 @@ export default function Layout(props) {
 
   return (
     <Dispatch.Provider value={{ dispatch }}>
-      <CaseRecordFloater caseRecord={props.caseRecord} />
+      <CaseRecordFloater 
+        caseRecord={props.caseRecord}
+        annotations={props.annotations}
+      />
       <MaterialsDrawer 
         nodeInfo={props.nodeInfo}
         materialPriority={props.materialPriority}

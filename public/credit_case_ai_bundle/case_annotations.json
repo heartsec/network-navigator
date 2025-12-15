@@ -1,0 +1,553 @@
+{
+  "caseRecordId": "XX支行 20251118-02号",
+  "version": "1.0",
+  "generatedAt": "2025-12-15T00:00:00Z",
+  "annotations": [
+    {
+      "factId": "F1",
+      "factName": "主体成立时间",
+      "text": "2024年6月18日",
+      "startPos": 27,
+      "endPos": 38,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F2",
+      "factName": "主体无开票记录",
+      "text": "2024年未开票",
+      "startPos": 39,
+      "endPos": 49,
+      "hasRelation": true,
+      "relatedFactIds": ["F3"],
+      "relatedEdges": [
+        {
+          "edgeId": "e10",
+          "relatedFactId": "F3",
+          "relationType": "时间逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "2024年无开票记录与2025年有开票金额不冲突，但需确认是否跨年业务真实发生。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F3",
+      "factName": "主体年度开票金额",
+      "text": "2025年开票金额约424万元",
+      "startPos": 50,
+      "endPos": 68,
+      "hasRelation": true,
+      "relatedFactIds": ["F5", "F2"],
+      "relatedEdges": [
+        {
+          "edgeId": "e1",
+          "relatedFactId": "F5",
+          "relationType": "数量逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "企业年开票金额与日均存款应存在合理比例关系，通常日均存款不应显著低于年开票金额的一定比例（如5%-10%），否则可能存在资金回流不足或收入真实性存疑。"
+        },
+        {
+          "edgeId": "e10",
+          "relatedFactId": "F2",
+          "relationType": "时间逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "2024年无开票记录与2025年有开票金额不冲突，但需确认是否跨年业务真实发生。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F4",
+      "factName": "主体基本户开户行",
+      "text": "在我支行开立基本户",
+      "startPos": 73,
+      "endPos": 84,
+      "hasRelation": true,
+      "relatedFactIds": ["F5"],
+      "relatedEdges": [
+        {
+          "edgeId": "e12",
+          "relatedFactId": "F5",
+          "relationType": "账户行为一致性",
+          "direction": "undirected",
+          "reasonBrief": "基本户开户行的日均存款应反映企业主要资金沉淀情况，若日均存款过低，可能基本户未实际使用或存在多头开户。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F5",
+      "factName": "主体年度日均存款",
+      "text": "2025年日均存款约38万元",
+      "startPos": 85,
+      "endPos": 101,
+      "hasRelation": true,
+      "relatedFactIds": ["F3", "F4"],
+      "relatedEdges": [
+        {
+          "edgeId": "e1",
+          "relatedFactId": "F3",
+          "relationType": "数量逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "企业年开票金额与日均存款应存在合理比例关系，通常日均存款不应显著低于年开票金额的一定比例（如5%-10%），否则可能存在资金回流不足或收入真实性存疑。"
+        },
+        {
+          "edgeId": "e12",
+          "relatedFactId": "F4",
+          "relationType": "账户行为一致性",
+          "direction": "undirected",
+          "reasonBrief": "基本户开户行的日均存款应反映企业主要资金沉淀情况，若日均存款过低，可能基本户未实际使用或存在多头开户。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F6",
+      "factName": "主体租赁面积",
+      "text": "租赁乙公司厂房20655.88平方米",
+      "startPos": 109,
+      "endPos": 130,
+      "hasRelation": true,
+      "relatedFactIds": ["F8"],
+      "relatedEdges": [
+        {
+          "edgeId": "e2",
+          "relatedFactId": "F8",
+          "relationType": "数量逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "已转租面积不应超过租赁总面积，且剩余未转租面积应等于租赁面积减去已转租面积。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F7",
+      "factName": "主体年度租金支出",
+      "text": "年租金支出428万元不等",
+      "startPos": 131,
+      "endPos": 146,
+      "hasRelation": true,
+      "relatedFactIds": ["F9"],
+      "relatedEdges": [
+        {
+          "edgeId": "e3",
+          "relatedFactId": "F9",
+          "relationType": "单位指标合理性",
+          "direction": "directed",
+          "reasonBrief": "转租收入应与支出形成合理价差，单位面积转租单价通常应高于租入单价，否则商业模式不可持续。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F8",
+      "factName": "主体已转租面积",
+      "text": "已有16716.90平方米转租给多家商户",
+      "startPos": 150,
+      "endPos": 173,
+      "hasRelation": true,
+      "relatedFactIds": ["F6", "F9", "F10"],
+      "relatedEdges": [
+        {
+          "edgeId": "e2",
+          "relatedFactId": "F6",
+          "relationType": "数量逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "已转租面积不应超过租赁总面积，且剩余未转租面积应等于租赁面积减去已转租面积。"
+        },
+        {
+          "edgeId": "e4",
+          "relatedFactId": "F9",
+          "relationType": "单位指标合理性",
+          "direction": "directed",
+          "reasonBrief": "根据已转租面积和年租金收入，可计算单位面积年租金，应处于当地市场合理区间内。"
+        },
+        {
+          "edgeId": "e5",
+          "relatedFactId": "F10",
+          "relationType": "数量逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "拟转租面积 + 已转租面积 应 ≤ 租赁总面积，且拟转租面积应为非负数。"
+        }
+      ],
+      "riskLevel": "high",
+      "highlightColor": "red"
+    },
+    {
+      "factId": "F9",
+      "factName": "主体已出租/转租年度租金收入",
+      "text": "年租金收入约671万元",
+      "startPos": 174,
+      "endPos": 188,
+      "hasRelation": true,
+      "relatedFactIds": ["F7", "F8"],
+      "relatedEdges": [
+        {
+          "edgeId": "e3",
+          "relatedFactId": "F7",
+          "relationType": "单位指标合理性",
+          "direction": "directed",
+          "reasonBrief": "转租收入应与支出形成合理价差，单位面积转租单价通常应高于租入单价，否则商业模式不可持续。"
+        },
+        {
+          "edgeId": "e4",
+          "relatedFactId": "F8",
+          "relationType": "单位指标合理性",
+          "direction": "directed",
+          "reasonBrief": "根据已转租面积和年租金收入，可计算单位面积年租金，应处于当地市场合理区间内。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F10",
+      "factName": "主体拟转租面积及预期租金",
+      "text": "另3938.98平方米正在商谈，预计租金约200-300万元",
+      "startPos": 189,
+      "endPos": 221,
+      "hasRelation": true,
+      "relatedFactIds": ["F8"],
+      "relatedEdges": [
+        {
+          "edgeId": "e5",
+          "relatedFactId": "F8",
+          "relationType": "数量逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "拟转租面积 + 已转租面积 应 ≤ 租赁总面积，且拟转租面积应为非负数。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F11",
+      "factName": "法定代表人公职身份",
+      "text": "企业法定代表人张三为某村书记",
+      "startPos": 228,
+      "endPos": 244,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F12",
+      "factName": "法定代表人自有房产数量与类型",
+      "text": "在某村有6间落地",
+      "startPos": 245,
+      "endPos": 255,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F13",
+      "factName": "关联企业在本行贷款余额",
+      "text": "关联企业丙公司在我支行贷款500万元",
+      "startPos": 256,
+      "endPos": 277,
+      "hasRelation": true,
+      "relatedFactIds": ["F14"],
+      "relatedEdges": [
+        {
+          "edgeId": "e6",
+          "relatedFactId": "F14",
+          "relationType": "资产覆盖合理性",
+          "direction": "directed",
+          "reasonBrief": "抵押物价值应能覆盖贷款余额，通常要求抵押率不超过一定比例（如70%）。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F14",
+      "factName": "关联企业抵押物信息",
+      "text": "由该公司位于某村厂房抵押，厂房约2.5亩，建筑面积约856.47平方米",
+      "startPos": 278,
+      "endPos": 315,
+      "hasRelation": true,
+      "relatedFactIds": ["F13"],
+      "relatedEdges": [
+        {
+          "edgeId": "e6",
+          "relatedFactId": "F13",
+          "relationType": "资产覆盖合理性",
+          "direction": "directed",
+          "reasonBrief": "抵押物价值应能覆盖贷款余额，通常要求抵押率不超过一定比例（如70%）。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F15",
+      "factName": "关联企业自有/使用厂房面积",
+      "text": "关联企业丁公司，厂房约2亩",
+      "startPos": 316,
+      "endPos": 332,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F16",
+      "factName": "法定代表人对外担保余额（他行）",
+      "text": "法定代表人他行担保贷款余额约138万元",
+      "startPos": 342,
+      "endPos": 363,
+      "hasRelation": true,
+      "relatedFactIds": ["F18"],
+      "relatedEdges": [
+        {
+          "edgeId": "e7",
+          "relatedFactId": "F18",
+          "relationType": "数量逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "对外担保总额应 ≥ 他行担保余额，因他行担保是对外担保的一部分。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F17",
+      "factName": "法定代表人信用卡透支余额",
+      "text": "信用卡透支约17万元",
+      "startPos": 364,
+      "endPos": 377,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F18",
+      "factName": "法定代表人对外担保金额",
+      "text": "对外担保50万元",
+      "startPos": 378,
+      "endPos": 388,
+      "hasRelation": true,
+      "relatedFactIds": ["F16"],
+      "relatedEdges": [
+        {
+          "edgeId": "e7",
+          "relatedFactId": "F16",
+          "relationType": "数量逻辑一致性",
+          "direction": "undirected",
+          "reasonBrief": "对外担保总额应 ≥ 他行担保余额，因他行担保是对外担保的一部分。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F19",
+      "factName": "贷款担保人身份",
+      "text": "该笔贷款由李四夫妻担保",
+      "startPos": 412,
+      "endPos": 425,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F20",
+      "factName": "担保人对外投资及控制企业",
+      "text": "李四夫妻开有戊公司、己公司、庚公司大股东",
+      "startPos": 426,
+      "endPos": 449,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F21",
+      "factName": "担保人自有房产及租金收入",
+      "text": "资产某地三间8层落地，年租金收入28万元",
+      "startPos": 450,
+      "endPos": 473,
+      "hasRelation": true,
+      "relatedFactIds": ["F25"],
+      "relatedEdges": [
+        {
+          "edgeId": "e8",
+          "relatedFactId": "F25",
+          "relationType": "收入佐证一致性",
+          "direction": "undirected",
+          "reasonBrief": "担保人声明的年净收入应能被其资产性收入（如租金）及其他收入来源合理支撑。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F22",
+      "factName": "担保人自有高端住宅数量",
+      "text": "别墅二套",
+      "startPos": 474,
+      "endPos": 479,
+      "hasRelation": true,
+      "relatedFactIds": ["F24"],
+      "relatedEdges": [
+        {
+          "edgeId": "e9",
+          "relatedFactId": "F24",
+          "relationType": "资产价值一致性",
+          "direction": "undirected",
+          "reasonBrief": "高端住宅数量与单套住宅评估价值应匹配，避免资产虚高或低估。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F23",
+      "factName": "担保人商业物业资产",
+      "text": "某大厦商铺约72平方米，价值约100万元",
+      "startPos": 480,
+      "endPos": 501,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F24",
+      "factName": "担保人住宅资产评估价值",
+      "text": "某房产，建筑面积156.88平方米，RPS评估价356万元",
+      "startPos": 502,
+      "endPos": 536,
+      "hasRelation": true,
+      "relatedFactIds": ["F22"],
+      "relatedEdges": [
+        {
+          "edgeId": "e9",
+          "relatedFactId": "F22",
+          "relationType": "资产价值一致性",
+          "direction": "undirected",
+          "reasonBrief": "高端住宅数量与单套住宅评估价值应匹配，避免资产虚高或低估。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F25",
+      "factName": "担保人年度净收入",
+      "text": "担保人年净收入约100-150万元",
+      "startPos": 537,
+      "endPos": 557,
+      "hasRelation": true,
+      "relatedFactIds": ["F21", "F27"],
+      "relatedEdges": [
+        {
+          "edgeId": "e8",
+          "relatedFactId": "F21",
+          "relationType": "收入佐证一致性",
+          "direction": "undirected",
+          "reasonBrief": "担保人声明的年净收入应能被其资产性收入（如租金）及其他收入来源合理支撑。"
+        },
+        {
+          "edgeId": "e11",
+          "relatedFactId": "F27",
+          "relationType": "偿债能力合理性",
+          "direction": "directed",
+          "reasonBrief": "保证贷款余额应与担保人年净收入保持合理比例，通常年收入应能覆盖贷款余额的一定比例（如20%以上）以体现代偿能力。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F26",
+      "factName": "担保人无负债声明",
+      "text": "王五无负债",
+      "startPos": 566,
+      "endPos": 572,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F27",
+      "factName": "担保人保证贷款余额",
+      "text": "李四保证贷款余额约53.7万元",
+      "startPos": 573,
+      "endPos": 591,
+      "hasRelation": true,
+      "relatedFactIds": ["F25"],
+      "relatedEdges": [
+        {
+          "edgeId": "e11",
+          "relatedFactId": "F25",
+          "relationType": "偿债能力合理性",
+          "direction": "directed",
+          "reasonBrief": "保证贷款余额应与担保人年净收入保持合理比例，通常年收入应能覆盖贷款余额的一定比例（如20%以上）以体现代偿能力。"
+        }
+      ],
+      "riskLevel": "medium",
+      "highlightColor": "orange"
+    },
+    {
+      "factId": "F28",
+      "factName": "担保人信用卡透支余额",
+      "text": "信用卡透支约0.9万元",
+      "startPos": 592,
+      "endPos": 606,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    },
+    {
+      "factId": "F29",
+      "factName": "贷款审批额度",
+      "text": "同意贷款250万元",
+      "startPos": 645,
+      "endPos": 657,
+      "hasRelation": false,
+      "relatedFactIds": [],
+      "relatedEdges": [],
+      "riskLevel": "info",
+      "highlightColor": "blue"
+    }
+  ],
+  "statistics": {
+    "totalAnnotations": 29,
+    "factsWithRelations": 17,
+    "factsWithoutRelations": 12,
+    "totalEdges": 12,
+    "riskLevelDistribution": {
+      "high": 1,
+      "medium": 16,
+      "low": 0,
+      "info": 12
+    }
+  }
+}

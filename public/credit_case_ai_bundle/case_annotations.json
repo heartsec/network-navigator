@@ -7,8 +7,8 @@
       "factId": "F1",
       "factName": "主体成立时间",
       "text": "2024年6月18日",
-      "startPos": 27,
-      "endPos": 38,
+      "startPos": 29,
+      "endPos": 39,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -19,10 +19,12 @@
       "factId": "F2",
       "factName": "主体无开票记录",
       "text": "2024年未开票",
-      "startPos": 39,
-      "endPos": 49,
+      "startPos": 40,
+      "endPos": 48,
       "hasRelation": true,
-      "relatedFactIds": ["F3"],
+      "relatedFactIds": [
+        "F3"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e10",
@@ -39,10 +41,13 @@
       "factId": "F3",
       "factName": "主体年度开票金额",
       "text": "2025年开票金额约424万元",
-      "startPos": 50,
-      "endPos": 68,
+      "startPos": 49,
+      "endPos": 64,
       "hasRelation": true,
-      "relatedFactIds": ["F5", "F2"],
+      "relatedFactIds": [
+        "F5",
+        "F2"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e1",
@@ -66,10 +71,12 @@
       "factId": "F4",
       "factName": "主体基本户开户行",
       "text": "在我支行开立基本户",
-      "startPos": 73,
-      "endPos": 84,
+      "startPos": 68,
+      "endPos": 77,
       "hasRelation": true,
-      "relatedFactIds": ["F5"],
+      "relatedFactIds": [
+        "F5"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e12",
@@ -86,10 +93,13 @@
       "factId": "F5",
       "factName": "主体年度日均存款",
       "text": "2025年日均存款约38万元",
-      "startPos": 85,
-      "endPos": 101,
+      "startPos": 78,
+      "endPos": 92,
       "hasRelation": true,
-      "relatedFactIds": ["F3", "F4"],
+      "relatedFactIds": [
+        "F3",
+        "F4"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e1",
@@ -113,10 +123,12 @@
       "factId": "F6",
       "factName": "主体租赁面积",
       "text": "租赁乙公司厂房20655.88平方米",
-      "startPos": 109,
-      "endPos": 130,
+      "startPos": 99,
+      "endPos": 117,
       "hasRelation": true,
-      "relatedFactIds": ["F8"],
+      "relatedFactIds": [
+        "F8"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e2",
@@ -133,10 +145,12 @@
       "factId": "F7",
       "factName": "主体年度租金支出",
       "text": "年租金支出428万元不等",
-      "startPos": 131,
-      "endPos": 146,
+      "startPos": 118,
+      "endPos": 130,
       "hasRelation": true,
-      "relatedFactIds": ["F9"],
+      "relatedFactIds": [
+        "F9"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e3",
@@ -153,10 +167,14 @@
       "factId": "F8",
       "factName": "主体已转租面积",
       "text": "已有16716.90平方米转租给多家商户",
-      "startPos": 150,
-      "endPos": 173,
+      "startPos": 132,
+      "endPos": 152,
       "hasRelation": true,
-      "relatedFactIds": ["F6", "F9", "F10"],
+      "relatedFactIds": [
+        "F6",
+        "F9",
+        "F10"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e2",
@@ -187,10 +205,13 @@
       "factId": "F9",
       "factName": "主体已出租/转租年度租金收入",
       "text": "年租金收入约671万元",
-      "startPos": 174,
-      "endPos": 188,
+      "startPos": 153,
+      "endPos": 164,
       "hasRelation": true,
-      "relatedFactIds": ["F7", "F8"],
+      "relatedFactIds": [
+        "F7",
+        "F8"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e3",
@@ -214,10 +235,12 @@
       "factId": "F10",
       "factName": "主体拟转租面积及预期租金",
       "text": "另3938.98平方米正在商谈，预计租金约200-300万元",
-      "startPos": 189,
-      "endPos": 221,
+      "startPos": 165,
+      "endPos": 195,
       "hasRelation": true,
-      "relatedFactIds": ["F8"],
+      "relatedFactIds": [
+        "F8"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e5",
@@ -234,8 +257,8 @@
       "factId": "F11",
       "factName": "法定代表人公职身份",
       "text": "企业法定代表人张三为某村书记",
-      "startPos": 228,
-      "endPos": 244,
+      "startPos": 206,
+      "endPos": 220,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -246,8 +269,8 @@
       "factId": "F12",
       "factName": "法定代表人自有房产数量与类型",
       "text": "在某村有6间落地",
-      "startPos": 245,
-      "endPos": 255,
+      "startPos": 221,
+      "endPos": 229,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -258,10 +281,12 @@
       "factId": "F13",
       "factName": "关联企业在本行贷款余额",
       "text": "关联企业丙公司在我支行贷款500万元",
-      "startPos": 256,
-      "endPos": 277,
+      "startPos": 230,
+      "endPos": 248,
       "hasRelation": true,
-      "relatedFactIds": ["F14"],
+      "relatedFactIds": [
+        "F14"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e6",
@@ -278,10 +303,12 @@
       "factId": "F14",
       "factName": "关联企业抵押物信息",
       "text": "由该公司位于某村厂房抵押，厂房约2.5亩，建筑面积约856.47平方米",
-      "startPos": 278,
-      "endPos": 315,
+      "startPos": 249,
+      "endPos": 284,
       "hasRelation": true,
-      "relatedFactIds": ["F13"],
+      "relatedFactIds": [
+        "F13"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e6",
@@ -298,8 +325,8 @@
       "factId": "F15",
       "factName": "关联企业自有/使用厂房面积",
       "text": "关联企业丁公司，厂房约2亩",
-      "startPos": 316,
-      "endPos": 332,
+      "startPos": 285,
+      "endPos": 298,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -310,10 +337,12 @@
       "factId": "F16",
       "factName": "法定代表人对外担保余额（他行）",
       "text": "法定代表人他行担保贷款余额约138万元",
-      "startPos": 342,
-      "endPos": 363,
+      "startPos": 305,
+      "endPos": 324,
       "hasRelation": true,
-      "relatedFactIds": ["F18"],
+      "relatedFactIds": [
+        "F18"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e7",
@@ -330,8 +359,8 @@
       "factId": "F17",
       "factName": "法定代表人信用卡透支余额",
       "text": "信用卡透支约17万元",
-      "startPos": 364,
-      "endPos": 377,
+      "startPos": 325,
+      "endPos": 335,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -342,10 +371,12 @@
       "factId": "F18",
       "factName": "法定代表人对外担保金额",
       "text": "对外担保50万元",
-      "startPos": 378,
-      "endPos": 388,
+      "startPos": 336,
+      "endPos": 344,
       "hasRelation": true,
-      "relatedFactIds": ["F16"],
+      "relatedFactIds": [
+        "F16"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e7",
@@ -362,8 +393,8 @@
       "factId": "F19",
       "factName": "贷款担保人身份",
       "text": "该笔贷款由李四夫妻担保",
-      "startPos": 412,
-      "endPos": 425,
+      "startPos": 366,
+      "endPos": 377,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -374,8 +405,8 @@
       "factId": "F20",
       "factName": "担保人对外投资及控制企业",
       "text": "李四夫妻开有戊公司、己公司、庚公司大股东",
-      "startPos": 426,
-      "endPos": 449,
+      "startPos": 378,
+      "endPos": 398,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -386,10 +417,12 @@
       "factId": "F21",
       "factName": "担保人自有房产及租金收入",
       "text": "资产某地三间8层落地，年租金收入28万元",
-      "startPos": 450,
-      "endPos": 473,
+      "startPos": 399,
+      "endPos": 419,
       "hasRelation": true,
-      "relatedFactIds": ["F25"],
+      "relatedFactIds": [
+        "F25"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e8",
@@ -406,10 +439,12 @@
       "factId": "F22",
       "factName": "担保人自有高端住宅数量",
       "text": "别墅二套",
-      "startPos": 474,
-      "endPos": 479,
+      "startPos": 420,
+      "endPos": 424,
       "hasRelation": true,
-      "relatedFactIds": ["F24"],
+      "relatedFactIds": [
+        "F24"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e9",
@@ -426,8 +461,8 @@
       "factId": "F23",
       "factName": "担保人商业物业资产",
       "text": "某大厦商铺约72平方米，价值约100万元",
-      "startPos": 480,
-      "endPos": 501,
+      "startPos": 425,
+      "endPos": 445,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -438,10 +473,12 @@
       "factId": "F24",
       "factName": "担保人住宅资产评估价值",
       "text": "某房产，建筑面积156.88平方米，RPS评估价356万元",
-      "startPos": 502,
-      "endPos": 536,
+      "startPos": 446,
+      "endPos": 475,
       "hasRelation": true,
-      "relatedFactIds": ["F22"],
+      "relatedFactIds": [
+        "F22"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e9",
@@ -458,10 +495,13 @@
       "factId": "F25",
       "factName": "担保人年度净收入",
       "text": "担保人年净收入约100-150万元",
-      "startPos": 537,
-      "endPos": 557,
+      "startPos": 476,
+      "endPos": 493,
       "hasRelation": true,
-      "relatedFactIds": ["F21", "F27"],
+      "relatedFactIds": [
+        "F21",
+        "F27"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e8",
@@ -485,8 +525,8 @@
       "factId": "F26",
       "factName": "担保人无负债声明",
       "text": "王五无负债",
-      "startPos": 566,
-      "endPos": 572,
+      "startPos": 499,
+      "endPos": 504,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -497,10 +537,12 @@
       "factId": "F27",
       "factName": "担保人保证贷款余额",
       "text": "李四保证贷款余额约53.7万元",
-      "startPos": 573,
-      "endPos": 591,
+      "startPos": 505,
+      "endPos": 520,
       "hasRelation": true,
-      "relatedFactIds": ["F25"],
+      "relatedFactIds": [
+        "F25"
+      ],
       "relatedEdges": [
         {
           "edgeId": "e11",
@@ -517,8 +559,8 @@
       "factId": "F28",
       "factName": "担保人信用卡透支余额",
       "text": "信用卡透支约0.9万元",
-      "startPos": 592,
-      "endPos": 606,
+      "startPos": 521,
+      "endPos": 532,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],
@@ -529,8 +571,8 @@
       "factId": "F29",
       "factName": "贷款审批额度",
       "text": "同意贷款250万元",
-      "startPos": 645,
-      "endPos": 657,
+      "startPos": 557,
+      "endPos": 566,
       "hasRelation": false,
       "relatedFactIds": [],
       "relatedEdges": [],

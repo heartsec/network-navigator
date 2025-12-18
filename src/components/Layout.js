@@ -1,7 +1,5 @@
 import React, { useReducer } from "react";
-import { Menu, Rail, Sidebar as SemanticSidebar } from "semantic-ui-react";
 import NetworkNavigator from "./NetworkNavigator";
-import Sidebar from "./Sidebar";
 import CaseRecordFloater from "./CaseRecordFloater";
 import MaterialsDrawer from "./MaterialsDrawer";
 import Dispatch from "../context/Dispatch";
@@ -57,8 +55,6 @@ export default function Layout(props) {
     linkScale: "root",
     labelsVisible: true,
     simulationEnabled: true,
-    sidebarVisible: false,
-    sidebarWidth: 350,
     selectedNode: null,
     selectedNodeNameUpdatedBit: true,
     occurrences: null,
@@ -81,38 +77,11 @@ export default function Layout(props) {
         network={props.network}
         highlightedFacts={state.highlightedFacts}
       />
-      <SemanticSidebar.Pushable style={{ height: "100vh", overflow: "hidden" }}>
-        <Sidebar {...state} {...props} />
-        <SemanticSidebar.Pusher>
-          {!state.sidebarVisible && (
-            <Rail
-              internal
-              position="right"
-              style={{ padding: 0, margin: 0, height: "auto", width: "auto", zIndex: 1000 }}
-            >
-              <Menu vertical size="small" style={{ minWidth: '120px' }}>
-                <Menu.Item
-                  onClick={() =>
-                    dispatch({ type: "sidebarVisible", value: true })
-                  }
-                  style={{ cursor: 'pointer', padding: '10px' }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <i className="sidebar icon" style={{ margin: 0 }}></i>
-                    <div style={{ fontSize: '0.85em', lineHeight: '1.3' }}>
-                      <div><strong>{props.nodeData ? props.nodeData.size : 0}</strong> 事实</div>
-                      <div><strong>{props.edgeData ? props.edgeData.length : 0}</strong> 勾稽</div>
-                    </div>
-                  </div>
-                </Menu.Item>
-              </Menu>
-            </Rail>
-          )}
-          <React.StrictMode>
-            <NetworkNavigator {...state} {...props} />
-          </React.StrictMode>
-        </SemanticSidebar.Pusher>
-      </SemanticSidebar.Pushable>
+      <div style={{ height: "100vh", overflow: "hidden" }}>
+        <React.StrictMode>
+          <NetworkNavigator {...state} {...props} />
+        </React.StrictMode>
+      </div>
     </Dispatch.Provider>
   );
 }

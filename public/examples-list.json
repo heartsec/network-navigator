@@ -1,6 +1,11 @@
 {
   "files": [
     {
+      "filename": "unified_bundle_structure.json",
+      "name": "Unified Bundle Structure",
+      "description": "Single JSON file containing all network data"
+    },
+    {
       "filename": "credit_case_ai_bundle/credit_case_ai_fact_graph.ftree",
       "name": "信用案例智能体分析结果",
       "description": "基于智能体输出的事实标签映射和风险传递边生成的可视化数据",

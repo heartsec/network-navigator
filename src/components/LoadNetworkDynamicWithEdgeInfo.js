@@ -15,6 +15,7 @@ import Background from "../images/Background.svg";
 import parseFTree from "../io/ftree";
 import networkFromFTree from "../io/network-from-ftree";
 import parseFile from "../io/parse-file";
+import { parseEdgeData, parseNodeData, parseNodeInfo, mockBackendProcessingAndLoad, processUnifiedBundle } from "../io/data-loader";
 
 const errorState = (err) => ({
   progressError: true,
@@ -43,6 +44,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
   };
 
   progressTimeout = null;
+  availableFilesData = [];
 
   componentDidMount() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -81,28 +83,26 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       if (response.ok) {
         // 如果存在 examples-list.json，使用它
         const data = await response.json();
+        
+        // Store full data for internal use
+        this.availableFilesData = data.files;
+
         const exampleFiles = data.files.map((file) => ({
-          key: file.filename.replace(".ftree", ""),
+          key: file.filename.replace(".ftree", "").replace(".json", ""),
           text: file.name || this.formatFileName(file.filename),
           value: file.filename,
           description: file.description || "",
-          edgeDataPath: file.edgeDataPath || "",
-          nodeDataPath: file.nodeDataPath || "",
-          nodeInfoPath: file.nodeInfoPath || "",
-          caseRecordPath: file.caseRecordPath || "",
-          materialPriorityPath: file.materialPriorityPath || "",
-          annotationsPath: file.annotationsPath || "",
         }));
         
         this.setState({
           exampleFiles,
           selectedExample: exampleFiles[0]?.value || "",
-          selectedEdgeDataPath: exampleFiles[0]?.edgeDataPath || "",
-          selectedNodeDataPath: exampleFiles[0]?.nodeDataPath || "",
-          selectedNodeInfoPath: exampleFiles[0]?.nodeInfoPath || "",
-          selectedCaseRecordPath: exampleFiles[0]?.caseRecordPath || "",
-          selectedMaterialPriorityPath: exampleFiles[0]?.materialPriorityPath || "",
-          selectedAnnotationsPath: exampleFiles[0]?.annotationsPath || "",
+          selectedEdgeDataPath: this.availableFilesData[0]?.edgeDataPath || "",
+          selectedNodeDataPath: this.availableFilesData[0]?.nodeDataPath || "",
+          selectedNodeInfoPath: this.availableFilesData[0]?.nodeInfoPath || "",
+          selectedCaseRecordPath: this.availableFilesData[0]?.caseRecordPath || "",
+          selectedMaterialPriorityPath: this.availableFilesData[0]?.materialPriorityPath || "",
+          selectedAnnotationsPath: this.availableFilesData[0]?.annotationsPath || "",
           loading: false,
         });
       } else {
@@ -118,12 +118,20 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
   // 加载默认示例列表
   loadDefaultExamples = () => {
     const defaultExamples = [
+      "unified_bundle_structure.json",
       "citation_data.ftree",
       "tiny_fact_graph_valid.ftree",
     ];
 
+    // Populate availableFilesData for defaults
+    this.availableFilesData = defaultExamples.map(filename => ({
+        filename,
+        name: this.formatFileName(filename),
+        description: ""
+    }));
+
     const exampleFiles = defaultExamples.map((filename) => ({
-      key: filename.replace(".ftree", ""),
+      key: filename.replace(".ftree", "").replace(".json", ""),
       text: this.formatFileName(filename),
       value: filename,
       description: "",
@@ -140,6 +148,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
   formatFileName = (filename) => {
     return filename
       .replace(".ftree", "")
+      .replace(".json", "")
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
@@ -161,31 +170,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       }
 
       const text = await response.text();
-      const lines = text.trim().split("\n");
-      
-      if (lines.length < 2) {
-        console.log("Node data file is empty");
-        return null;
-      }
-
-      // 解析 TSV 表头
-      const headers = lines[0].split("\t").map(h => h.trim());
-      
-      // 创建 fact_id -> node data 的映射
-      const nodeMap = new Map();
-      
-      lines.slice(1).forEach(line => {
-        const values = line.split("\t");
-        const node = {};
-        
-        headers.forEach((header, index) => {
-          node[header] = values[index] ? values[index].trim() : "";
-        });
-        
-        if (node.fact_id) {
-          nodeMap.set(node.fact_id, node);
-        }
-      });
+      const nodeMap = parseNodeData(text);
       
       console.log(`Loaded ${nodeMap.size} node records`);
       return nodeMap;
@@ -211,31 +196,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       }
 
       const text = await response.text();
-      const lines = text.trim().split("\n");
-      
-      if (lines.length < 2) {
-        console.log("Node info file is empty");
-        return null;
-      }
-
-      // 解析 TSV 表头
-      const headers = lines[0].split("\t").map(h => h.trim());
-      
-      // 创建 fact_id -> node info 的映射
-      const nodeInfoMap = new Map();
-      
-      lines.slice(1).forEach(line => {
-        const values = line.split("\t");
-        const info = {};
-        
-        headers.forEach((header, index) => {
-          info[header] = values[index] ? values[index].trim() : "";
-        });
-        
-        if (info.fact_id) {
-          nodeInfoMap.set(info.fact_id, info);
-        }
-      });
+      const nodeInfoMap = parseNodeInfo(text);
       
       console.log(`Loaded ${nodeInfoMap.size} node info records`);
       return nodeInfoMap;
@@ -333,27 +294,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       }
 
       const text = await response.text();
-      const lines = text.trim().split("\n");
-      
-      if (lines.length < 2) {
-        console.log("Edge data file is empty");
-        return null;
-      }
-
-      // 解析 TSV 表头
-      const headers = lines[0].split("\t").map(h => h.trim());
-      
-      // 解析数据行
-      const edges = lines.slice(1).map(line => {
-        const values = line.split("\t");
-        const edge = {};
-        
-        headers.forEach((header, index) => {
-          edge[header] = values[index] ? values[index].trim() : "";
-        });
-        
-        return edge;
-      });
+      const edges = parseEdgeData(text);
 
       console.log(`Loaded ${edges.length} edge relationships`);
       return edges;
@@ -363,7 +304,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
     }
   };
 
-  loadNetwork = (file, name) => {
+  loadNetwork = (file, name, dataSources = null) => {
     if (!name && file && file.name) {
       name = file.name;
     }
@@ -383,6 +324,59 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
         }),
       400
     );
+
+    // 如果提供了 dataSources (来自 Unified Bundle)，则直接使用
+    if (dataSources) {
+        this.setState({
+            progressValue: 3,
+            progressLabel: "Loading additional data...",
+        });
+        
+        setTimeout(() => {
+            this.setState({
+                progressLabel: "Success",
+                progressVisible: false
+            });
+            this.props.onLoad({
+                network: dataSources.network,
+                filename: name,
+                edgeData: dataSources.edgeData,
+                nodeData: dataSources.nodeData,
+                nodeInfo: dataSources.nodeInfo,
+                caseRecord: dataSources.caseRecord,
+                materialPriority: dataSources.materialPriority,
+                annotations: dataSources.annotations
+            });
+        }, 200);
+        return Promise.resolve();
+    }
+
+    // 处理 JSON 文件上传 (Unified Bundle)
+    if (file && name && name.endsWith('.json')) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    processUnifiedBundle(json)
+                        .then(ds => this.loadNetwork(null, name, ds))
+                        .then(resolve)
+                        .catch(err => {
+                            this.setState(errorState(err));
+                            reject(err);
+                        });
+                } catch (err) {
+                    this.setState(errorState(err));
+                    reject(err);
+                }
+            };
+            reader.onerror = (err) => {
+                this.setState(errorState(err));
+                reject(err);
+            };
+            reader.readAsText(file);
+        });
+    }
 
     return parseFile(file)
       .then((parsed) => {
@@ -455,6 +449,22 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
       progressError: false,
     });
 
+    // Check if it is a JSON file (Unified Bundle)
+    if (filename.endsWith('.json')) {
+        fetch(`${process.env.PUBLIC_URL}/${filename}`)
+            .then(res => {
+                if (!res.ok) throw new Error(`Failed to load ${filename}`);
+                return res.json();
+            })
+            .then(bundle => processUnifiedBundle(bundle))
+            .then(dataSources => this.loadNetwork(null, filename, dataSources))
+            .catch(err => {
+                this.setState(errorState(err));
+                console.log(err);
+            });
+        return;
+    }
+
     fetch(`${process.env.PUBLIC_URL}/${filename}`)
       .then((res) => {
         if (!res.ok) {
@@ -471,7 +481,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
 
   handleExampleChange = (e, { value }) => {
     // 查找对应的边数据路径
-    const selectedFile = this.state.exampleFiles.find(file => file.value === value);
+    const selectedFile = this.availableFilesData.find(file => file.filename === value);
     this.setState({
       selectedExample: value,
       selectedEdgeDataPath: selectedFile?.edgeDataPath || "",
@@ -595,22 +605,20 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
                 flexDirection: "column", 
                 alignItems: "center",
                 padding: "10px",
-                maxWidth: "450px",
-                opacity: 0.5
+                maxWidth: "450px"
               }}>
-                <h3 style={{ marginBottom: "20px", color: "#999", fontSize: "1.2em" }}>上传待审会议记录</h3>
+                <h3 style={{ marginBottom: "20px", color: "#333", fontSize: "1.2em" }}>上传待审会议记录</h3>
                 <Step.Group style={{ margin: 0 }}>
                   <Step
-                    disabled={true}
-                    link={false}
-                    active={false}
+                    disabled={disabled}
+                    link
+                    onClick={() => document.getElementById("upload").click()}
                     icon="upload"
                     title="上传会议记录文件"
-                    description="功能未开通"
+                    description="支持 .ftree 或 .json"
                     style={{ 
                       padding: "1em 2em",
-                      cursor: "not-allowed",
-                      opacity: 0.6
+                      cursor: "pointer"
                     }}
                   />
                 </Step.Group>
@@ -622,7 +630,7 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
                 }}>
                   上传贷审会会记录：如贷款审议小组会议纪要
                   <br />
-                  <span style={{ fontSize: "0.9em", fontStyle: "italic" }}>（即将开放）</span>
+                  <span style={{ fontSize: "0.9em", fontStyle: "italic" }}>（支持 Unified Bundle）</span>
                 </div>
               </div>
             </div>
@@ -635,9 +643,9 @@ export default class LoadNetworkDynamicWithEdgeInfo extends React.Component {
             type="file"
             id="upload"
             onChange={() => this.loadNetwork(this.input.files[0])}
-            accept=".ftree"
+            accept=".ftree,.json"
             ref={(input) => (this.input = input)}
-            disabled={true}
+            disabled={false}
           />
 
           {progressVisible && (

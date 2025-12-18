@@ -127,9 +127,16 @@ export default function MaterialsDrawer(props) {
 
   // 获取资料项统计信息
   const materialStats = useMemo(() => {
-    if (!materialPriority || !materialPriority.materials) return [];
+    let materialsList = [];
+    if (Array.isArray(materialPriority)) {
+      materialsList = materialPriority;
+    } else if (materialPriority && Array.isArray(materialPriority.materials)) {
+      materialsList = materialPriority.materials;
+    } else {
+      return [];
+    }
 
-    return materialPriority.materials.map(material => {
+    return materialsList.map(material => {
       const facts = materialFactsMap.get(material.name) || [];
       return {
         ...material,

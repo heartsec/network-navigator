@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
+import { Sidebar as SemanticSidebar } from "semantic-ui-react";
 import NetworkNavigator from "./NetworkNavigator";
-import CaseRecordFloater from "./CaseRecordFloater";
+import DetailSidebar from "./DetailSidebar";
 import MaterialsDrawer from "./MaterialsDrawer";
 import Dispatch from "../context/Dispatch";
 
@@ -42,6 +43,13 @@ function reducer(state, action) {
       const newState = { ...state, highlightedFacts: action.value };
       console.log("新的 state.highlightedFacts:", newState.highlightedFacts);
       return newState;
+    case "selectMaterial":
+      const material = action.value;
+      return { 
+        ...state, 
+        selectedMaterial: material,
+        highlightedFacts: material ? material.factIds : null
+      };
     default:
       throw new Error();
   }
@@ -55,33 +63,42 @@ export default function Layout(props) {
     linkScale: "root",
     labelsVisible: true,
     simulationEnabled: true,
+    sidebarVisible: false,
+    sidebarWidth: 350,
     selectedNode: null,
     selectedNodeNameUpdatedBit: true,
     occurrences: null,
     lodEnabled: true,
     searchCallback: () => null,
     highlightedFacts: null,
+    selectedMaterial: null,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <Dispatch.Provider value={{ dispatch }}>
-      <CaseRecordFloater 
-        caseRecord={props.caseRecord}
-        annotations={props.annotations}
-      />
       <MaterialsDrawer 
         nodeInfo={props.nodeInfo}
         materialPriority={props.materialPriority}
         network={props.network}
         highlightedFacts={state.highlightedFacts}
       />
-      <div style={{ height: "100vh", overflow: "hidden" }}>
-        <React.StrictMode>
-          <NetworkNavigator {...state} {...props} />
-        </React.StrictMode>
-      </div>
+      <SemanticSidebar.Pushable style={{ height: "100vh", overflow: "hidden" }}>
+        <DetailSidebar 
+          caseRecord={props.caseRecord}
+          annotations={props.annotations}
+          selectedMaterial={state.selectedMaterial}
+          visible={true}
+          width={state.sidebarWidth}
+          nodeInfo={props.nodeInfo}
+        />
+        <SemanticSidebar.Pusher>
+          <React.StrictMode>
+            <NetworkNavigator {...state} {...props} />
+          </React.StrictMode>
+        </SemanticSidebar.Pusher>
+      </SemanticSidebar.Pushable>
     </Dispatch.Provider>
   );
 }

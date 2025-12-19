@@ -13,6 +13,10 @@ export default function MaterialsDrawer(props) {
   // 添加宽度状态
   const [drawerWidth, setDrawerWidth] = useState(350);
   const [isResizing, setIsResizing] = useState(false);
+  // 当前面板类型（用于复用同一抽屉组件显示不同列表）
+  const [panelType, setPanelType] = useState("materials");
+  // 当前悬停按钮（用于显示右侧标签）
+  const [hoveredButton, setHoveredButton] = useState(null);
 
   // 当外部取消高亮时，取消选中状态
   useEffect(() => {
@@ -179,22 +183,181 @@ export default function MaterialsDrawer(props) {
   return (
     <>
       {!open && (
-        <Button
-          circular
-          icon
-          size="large"
-          color="teal"
+        <div
           style={{
             position: "fixed",
             top: "20px",
             left: "20px",
             zIndex: 1000,
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px"
           }}
-          onClick={() => setOpen(true)}
         >
-          <Icon name="book" />
-        </Button>
+          {/* 主按钮：项目资料清单（绿色） */}
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <Button
+              circular
+              icon
+              size="large"
+              color="green"
+              style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}
+              onClick={() => { setPanelType("materials"); setOpen(true); }}
+              onMouseEnter={() => setHoveredButton('materials')}
+              onMouseLeave={() => setHoveredButton(null)}
+              onFocus={() => setHoveredButton('materials')}
+              onBlur={() => setHoveredButton(null)}
+              title="项目资料清单"
+            >
+              <Icon name="book" />
+            </Button>
+
+            <div
+              style={{
+                position: 'absolute',
+                left: '56px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                padding: '6px 10px',
+                backgroundColor: 'rgba(0,0,0,0.75)',
+                color: '#fff',
+                borderRadius: '4px',
+                fontSize: '0.85em',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+                opacity: hoveredButton === 'materials' ? 1 : 0,
+                pointerEvents: 'none',
+                transition: 'opacity 120ms ease-in-out'
+              }}
+              aria-hidden={hoveredButton !== 'materials'}
+            >
+              项目资料清单
+            </div>
+          </div>
+
+          {/* 额外按钮：合规知识库 */}
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <Button
+              circular
+              icon
+              size="large"
+              color="teal"
+              style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.08)" }}
+              onClick={() => { setPanelType("compliance"); setOpen(true); }}
+              onMouseEnter={() => setHoveredButton('compliance')}
+              onMouseLeave={() => setHoveredButton(null)}
+              onFocus={() => setHoveredButton('compliance')}
+              onBlur={() => setHoveredButton(null)}
+              title="合规知识库"
+            >
+              <Icon name="list" />
+            </Button>
+
+            <div
+              style={{
+                position: 'absolute',
+                left: '56px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                padding: '6px 10px',
+                backgroundColor: 'rgba(0,0,0,0.75)',
+                color: '#fff',
+                borderRadius: '4px',
+                fontSize: '0.85em',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+                opacity: hoveredButton === 'compliance' ? 1 : 0,
+                pointerEvents: 'none',
+                transition: 'opacity 120ms ease-in-out'
+              }}
+              aria-hidden={hoveredButton !== 'compliance'}
+            >
+              合规知识库
+            </div>
+          </div>
+
+          {/* 额外按钮：产业相关信息 */}
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <Button
+              circular
+              icon
+              size="large"
+              color="teal"
+              style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.08)" }}
+              onClick={() => { setPanelType("industry"); setOpen(true); }}
+              onMouseEnter={() => setHoveredButton('industry')}
+              onMouseLeave={() => setHoveredButton(null)}
+              onFocus={() => setHoveredButton('industry')}
+              onBlur={() => setHoveredButton(null)}
+              title="产业相关信息"
+            >
+              <Icon name="industry" />
+            </Button>
+
+            <div
+              style={{
+                position: 'absolute',
+                left: '56px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                padding: '6px 10px',
+                backgroundColor: 'rgba(0,0,0,0.75)',
+                color: '#fff',
+                borderRadius: '4px',
+                fontSize: '0.85em',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+                opacity: hoveredButton === 'industry' ? 1 : 0,
+                pointerEvents: 'none',
+                transition: 'opacity 120ms ease-in-out'
+              }}
+              aria-hidden={hoveredButton !== 'industry'}
+            >
+              产业相关信息
+            </div>
+          </div>
+
+          {/* 额外按钮：数据分析 */}
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <Button
+              circular
+              icon
+              size="large"
+              color="teal"
+              style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.08)" }}
+              onClick={() => { setPanelType("data"); setOpen(true); }}
+              onMouseEnter={() => setHoveredButton('data')}
+              onMouseLeave={() => setHoveredButton(null)}
+              onFocus={() => setHoveredButton('data')}
+              onBlur={() => setHoveredButton(null)}
+              title="数据分析"
+            >
+              <Icon name="chart bar" />
+            </Button>
+
+            <div
+              style={{
+                position: 'absolute',
+                left: '56px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                padding: '6px 10px',
+                backgroundColor: 'rgba(0,0,0,0.75)',
+                color: '#fff',
+                borderRadius: '4px',
+                fontSize: '0.85em',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+                opacity: hoveredButton === 'data' ? 1 : 0,
+                pointerEvents: 'none',
+                transition: 'opacity 120ms ease-in-out'
+              }}
+              aria-hidden={hoveredButton !== 'data'}
+            >
+              数据分析
+            </div>
+          </div>
+        </div>
       )}
 
       {open && (
@@ -252,7 +415,15 @@ export default function MaterialsDrawer(props) {
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <Icon name="book" color="blue" size="small" />
               <strong style={{ fontSize: "0.95em", color: "#2185d0" }}>
-                资料清单
+                {
+                  // 根据当前面板类型显示标题
+                  ({
+                    materials: "项目资料清单",
+                    compliance: "合规知识库",
+                    industry: "产业相关信息",
+                    data: "数据分析"
+                  }[panelType] || "资料清单")
+                }
               </strong>
             </div>
             <Icon 

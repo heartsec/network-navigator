@@ -305,7 +305,7 @@ export default function CaseRecordFloater(props) {
   if (!caseRecord) return null;
 
   const {
-    title = "贷审会记录",
+    title = "项目概览",
     meetingNumber = "桃源支行 20251118-02号",
     creditAmount = "250万元",
     content = ""

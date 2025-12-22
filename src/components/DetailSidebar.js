@@ -273,7 +273,7 @@ export default function DetailSidebar(props) {
       <div style={{ padding: '1em' }}>
         <Button 
           icon="arrow left" 
-          content="返回贷审会记录" 
+          content="返回项目概览" 
           onClick={() => dispatch({ type: "selectMaterial", value: null })}
           basic
           size="small"
@@ -347,7 +347,7 @@ export default function DetailSidebar(props) {
 
       {selectedMaterial ? renderMaterialDetails() : (
         <div style={{ padding: '1em' }}>
-          <Header as="h3" dividing>贷审会记录</Header>
+          <Header as="h3" dividing>项目概览</Header>
           {renderAnnotatedContent()}
         </div>
       )}

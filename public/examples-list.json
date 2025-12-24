@@ -2,19 +2,8 @@
   "files": [
     {
       "filename": "unified_bundle_structure.json",
-      "name": "Unified Bundle Structure",
-      "description": "Single JSON file containing all network data"
-    },
-    {
-      "filename": "credit_case_ai_bundle/credit_case_ai_fact_graph.ftree",
-      "name": "信用案例智能体分析结果",
-      "description": "基于智能体输出的事实标签映射和风险传递边生成的可视化数据",
-      "edgeDataPath": "credit_case_ai_bundle/credit_case_edges_ai.tsv",
-      "nodeDataPath": "credit_case_ai_bundle/credit_case_nodes_ai.tsv",
-      "nodeInfoPath": "credit_case_ai_bundle/credit_case_nodes_ai_info.tsv",
-      "caseRecordPath": "credit_case_ai_bundle/case_record.json",
-      "materialPriorityPath": "credit_case_ai_bundle/material_priority.json",
-      "annotationsPath": "credit_case_ai_bundle/case_annotations.json"
+      "name": "租赁公司贷款申请",
+      "description": "包含完整网络数据、节点信息及风险分析的综合案例"
     }
   ]
 }
